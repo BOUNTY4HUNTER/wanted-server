@@ -68,7 +68,7 @@ class UserServiceTest {
            user.setRegionDepth3("도안동");
            user.setEmail("dbswlsdyd@naver.com");
            user.setCoin(10000);
-           user.setIsAdmin("saff23fdsf2");
+           user.setIsAdmin(true);
            //user.setCreated_at();는 생성시 자동 설정
            user.setIsDeleted(0);
            userService.writeUser(user);

@@ -53,7 +53,7 @@ public class User {
     private Integer coin;
 
     @Column(length = 45, name = "is_admin")
-    private String isAdmin;
+    private Boolean isAdmin;
 
     @Column(name = "created_at")
     @CreatedDate
