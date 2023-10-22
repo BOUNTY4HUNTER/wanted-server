@@ -23,7 +23,7 @@ class UserServiceTest {
 
 
    @Test
-   public void getListUser(){
+   public void getListUsers(){
        List<User> userList = userService.getUserList();
        System.out.println("Userlist = " + userList);
        assertEquals(userList.size(), 5);
@@ -32,7 +32,7 @@ class UserServiceTest {
    }
 
    @Test
-   public void modifyTest(){
+   public void modifyUser(){
        User user = userService.findUserById(1);
        user.setUsername("kinggodbell");
        user.setNickname("godbell");
@@ -44,37 +44,34 @@ class UserServiceTest {
    }
 
    @Test
-   public void removeTest(){
+   public void removeUser(){
        int testId = 3;
        assertTrue(userService.findUserById(testId)!=null);
-       userService.removeUser(testId);
+       userService.removeUserById(testId);
        assertEquals(userService.findUserById(testId), null);
 
    }
 
 
    @BeforeEach
-    public void init(){
+    public void initUsers(){
        for(int i=1; i<=5; i++) {
            User user = new User();
            user.setId(i);
            user.setUsername("gdsc" + i);
            user.setPassword("asdc" + i);
            user.setNickname("nick" + i);
-           user.setLast_name("lastname" + i);
-           user.setFirst_name("firstname" + i);
-           user.setRegion_1depth("대전");
-           user.setRegion_2depth("서구");
-           user.setRegion_3depth("도안동");
+           user.setLastName("lastname" + i);
+           user.setFirstName("firstname" + i);
+           user.setRegionDepth1("대전");
+           user.setRegionDepth2("서구");
+           user.setRegionDepth3("도안동");
            user.setEmail("dbswlsdyd@naver.com");
            user.setCoin(10000);
-           user.setIs_admin("saff23fdsf2");
+           user.setIsAdmin("saff23fdsf2");
            //user.setCreated_at();는 생성시 자동 설정
-           user.setIs_deleted(0);
+           user.setIsDeleted(0);
            userService.writeUser(user);
        }
    }
-
-
-
 }

@@ -15,12 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-
     @Autowired
     UserRepository userRepository;
 
     //전체 유저 가져오는 메서드
     public List<User> getUserList(){
+
         return userRepository.findAll();
     }
 
@@ -37,35 +37,31 @@ public class UserService {
 
     //user 객체를 받아 해당 객체와 같은 id의 User를 수정하는 메서드
     public User modifyUser(User newUser){
-        User user = userRepository.findById(newUser.getId());
-        if(user==null)return null;
+        User user = userRepository.findById(newUser.getId().intValue());
+        if (user == null) {
+            return null;
+        }
         user.setUsername(newUser.getUsername());
         user.setPassword(newUser.getPassword());
         user.setNickname(newUser.getNickname());
-        user.setLast_name(newUser.getLast_name());
-        user.setFirst_name(newUser.getFirst_name());
-        user.setRegion_1depth(newUser.getRegion_1depth());
-        user.setRegion_2depth(newUser.getRegion_2depth());
-        user.setRegion_3depth(newUser.getRegion_3depth());
+        user.setLastName(newUser.getLastName());
+        user.setFirstName(newUser.getFirstName());
+        user.setRegionDepth1(newUser.getRegionDepth1());
+        user.setRegionDepth2(newUser.getRegionDepth2());
+        user.setRegionDepth3(newUser.getRegionDepth3());
         user.setEmail(newUser.getEmail());
         user.setCoin(newUser.getCoin());
-        user.setIs_admin(newUser.getIs_admin());
-        user.setCreated_at(newUser.getCreated_at());
-        user.setIs_deleted(newUser.getIs_deleted());
+        user.setIsAdmin(newUser.getIsAdmin());
+        user.setCreatedAt(newUser.getCreatedAt());
+        user.setIsDeleted(newUser.getIsDeleted());
         return userRepository.save(user);
     }
 
 
     //id를 이용해 user를 삭제하는 메서드
-    public void removeUser(int id){
+    public void removeUserById(int id){
         User user = userRepository.findById(id); //아니 orElse가 왜 안붙어
         if(user!=null)
             userRepository.deleteById(id);
     }
-
-
-
-
-
-
 }
