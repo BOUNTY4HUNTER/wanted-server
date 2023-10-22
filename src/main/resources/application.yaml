@@ -23,5 +23,5 @@ spring:
       database: ${DDB_NAME}
       host: ${DDB_HOST}
       port: ${DDB_PORT}
-      user: ${DDB_USER}
+      username: ${DDB_USER}
       password: ${DDB_PASSWORD}
