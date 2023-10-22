@@ -10,10 +10,8 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-
     User findById(int id);
-    void deleteById(int id);
-    List<User> findByCoin(int coin);
-
+    void deleteById(Integer id);
+    List<User> findByCoin(Integer coin);
 }
 
