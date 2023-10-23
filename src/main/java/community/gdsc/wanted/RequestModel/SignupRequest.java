@@ -51,7 +51,6 @@ public class SignupRequest {
     @NotEmpty(message = "지역은 필수 입력값입니다.")
     private String regionDepth3;
 
-
     public User toEntity() {
         return User.builder()
                 .username(username)

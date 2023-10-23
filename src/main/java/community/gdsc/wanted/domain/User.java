@@ -22,7 +22,7 @@ public class User {
     @Column(name = "id")
     private Integer id; //아이디
 
-    @Column(length = 20)
+    @Column(length = 20, unique = true)
     private String username;
 
     @Column(length = 40)
@@ -52,7 +52,7 @@ public class User {
     @Column(name = "coin")
     private Integer coin;
 
-    @Column(length = 45, name = "is_admin")
+    @Column(name = "is_admin")
     private Boolean isAdmin;
 
     @Column(name = "created_at")
@@ -63,6 +63,15 @@ public class User {
     private Integer isDeleted;
 
     public SignupRequest toPostUserRes() {
-        return new SignupRequest(username,password,password,firstName,lastName,email,nickname,regionDepth1,regionDepth2,regionDepth3);
+        return new SignupRequest(username,
+                                 password,
+                                 password,
+                                 firstName,
+                                 lastName,
+                                 email,
+                                 nickname,
+                                 regionDepth1,
+                                 regionDepth2,
+                                 regionDepth3);
     }
 }
