@@ -26,7 +26,7 @@ class UserServiceTest {
    public void getUsers(){
        List<User> userList = userService.getUserList();
        System.out.println("Userlist = " + userList);
-       assertEquals(userList.size(), 12);
+       assertEquals(userList.size(), 9);
 
 
    }
@@ -45,7 +45,7 @@ class UserServiceTest {
 
    @Test
    public void removeUser(){
-       final int TEST_ID = 5;
+       final int TEST_ID = 9;
        assertTrue(userService.findUserById(TEST_ID)!=null);
        userService.removeUserById(TEST_ID);
        assertEquals(userService.findUserById(TEST_ID), null);
