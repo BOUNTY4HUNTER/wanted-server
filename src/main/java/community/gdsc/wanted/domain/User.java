@@ -1,5 +1,6 @@
 package community.gdsc.wanted.domain;
 
+import community.gdsc.wanted.RequestModel.SignupRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GeneratedColumn;
@@ -60,4 +61,8 @@ public class User {
 
     @Column(name = "is_deleted")
     private Integer isDeleted;
+
+    public SignupRequest toPostUserRes() {
+        return new SignupRequest(username,password,password,firstName,lastName,email,nickname,regionDepth1,regionDepth2,regionDepth3);
+    }
 }
