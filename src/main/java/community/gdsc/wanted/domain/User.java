@@ -1,16 +1,14 @@
 package community.gdsc.wanted.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GeneratedColumn;
 import org.springframework.data.annotation.CreatedDate;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name="User")
+@Table(name="user")
 @Getter
 @Setter
 @Builder
@@ -19,6 +17,7 @@ import java.util.Objects;
 @EqualsAndHashCode
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id; //아이디
 
