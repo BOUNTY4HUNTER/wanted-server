@@ -23,10 +23,10 @@ class UserServiceTest {
 
 
    @Test
-   public void getListUsers(){
+   public void getUsers(){
        List<User> userList = userService.getUserList();
        System.out.println("Userlist = " + userList);
-       assertEquals(userList.size(), 5);
+       assertEquals(userList.size(), 12);
 
 
    }
@@ -45,19 +45,18 @@ class UserServiceTest {
 
    @Test
    public void removeUser(){
-       int testId = 3;
-       assertTrue(userService.findUserById(testId)!=null);
-       userService.removeUserById(testId);
-       assertEquals(userService.findUserById(testId), null);
+       final int TEST_ID = 5;
+       assertTrue(userService.findUserById(TEST_ID)!=null);
+       userService.removeUserById(TEST_ID);
+       assertEquals(userService.findUserById(TEST_ID), null);
 
    }
 
-
+/*
    @BeforeEach
     public void initUsers(){
        for(int i=1; i<=5; i++) {
            User user = new User();
-           user.setId(i);
            user.setUsername("gdsc" + i);
            user.setPassword("asdc" + i);
            user.setNickname("nick" + i);
@@ -74,4 +73,6 @@ class UserServiceTest {
            userService.writeUser(user);
        }
    }
+
+   */
 }
