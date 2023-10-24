@@ -18,13 +18,13 @@ public class SignupRequest {
     private String username;
     @NotEmpty(message = "비밀번호는 필수 입력값입니다.")
     @Size(min=6, max=40)
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
+    @Pattern(regexp = "^[ -~]+$")
     private String password;
 
     @NotEmpty(message = "비밀번호 확인은 필수 입력값입니다.")
     @Size(min=6, max=40)
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
-    private String confirmPassword;
+    @Pattern(regexp = "^[ -~]+$")
+    private String passwordConfirm;
 
     @NotEmpty(message = "이름은 필수 입력값입니다.")
     @Size(min=2, max=20)
@@ -42,13 +42,13 @@ public class SignupRequest {
     @NotEmpty(message = "닉네임은 필수 입력값입니다.")
     private String nickname;
 
-    @NotEmpty(message = "지역은 필수 입력값입니다.")
+    @NotEmpty(message = "'광역시/도'는 필수 입력값입니다.")
     private String regionDepth1;
 
-    @NotEmpty(message = "지역은 필수 입력값입니다.")
+    @NotEmpty(message = "'시/군/구' 필수 입력값입니다.")
     private String regionDepth2;
 
-    @NotEmpty(message = "지역은 필수 입력값입니다.")
+    @NotEmpty(message = "'읍/면/동'은 필수 입력값입니다.")
     private String regionDepth3;
 
     public User toEntity() {

@@ -20,7 +20,8 @@ public class UserService {
     UserRepository userRepository;
 
     //회원가입
-    public SignupRequest createUser(SignupRequest postUserReq) throws BaseException {
+    public SignupRequest
+    createUser(SignupRequest postUserReq) throws BaseException {
         String pwd;
         try {
             pwd = postUserReq.getPassword();
@@ -35,7 +36,6 @@ public class UserService {
 
     //아이디중복확인
     public boolean CheckId(String username)throws BaseException{
-        boolean duplicate =  false;
         try{
             User chkID = userRepository.findByUsername(username);
             if(chkID == null){
@@ -43,11 +43,11 @@ public class UserService {
             }
             System.out.println("chkID?? "+chkID);
             System.out.println("userId?? "+username);
-            if(chkID.getUsername().equals(username)){
+            if(chkID.getUsername().equals(username)) {
                 System.out.println("이미 데베에 존재해~!!");
-                duplicate =  true;
+                return false;
             }
-            return duplicate;
+            return true;
         } catch (Exception e){
             throw new BaseException(DATABASE_ERROR);
         }
@@ -61,7 +61,7 @@ public class UserService {
     }
 
     // 유저 작성하는 메서드
-    public User writeUser(User user){
+    public User addUser(User user){
         return userRepository.save(user);
     }
 
@@ -97,7 +97,9 @@ public class UserService {
     //id를 이용해 user를 삭제하는 메서드
     public void removeUserById(int id){
         User user = userRepository.findById(id);
-        if(user!=null)
-            userRepository.deleteById(id);
+        if(user==null) return;
+        userRepository.deleteById(id);
+
+        // TODO: 예외 throw
     }
 }

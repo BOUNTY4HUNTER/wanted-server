@@ -34,7 +34,7 @@ public class UserController {
         if (!isRegexEmail(postUserReq.getEmail())) {
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
-        String pw2 = postUserReq.getConfirmPassword();
+        String pw2 = postUserReq.getPasswordConfirm();
         //비밀번호중복확인(비밀번호 2번입력 확인차)
         if(!postUserReq.getPassword().equals(pw2)) {
             return new BaseResponse<>(INVALID_USER_PASSWORD);
