@@ -17,7 +17,7 @@ public class FoundService {
         foundRepository.save(found);
     }
 
-    // 글 수정함
+    // 글 수정
     public void modifyFound(Found modifiedFound) {
         foundRepository.save(modifiedFound);
     }
