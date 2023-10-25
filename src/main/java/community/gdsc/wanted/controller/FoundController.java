@@ -15,6 +15,7 @@ import community.gdsc.wanted.service.FoundService;
 import lombok.RequiredArgsConstructor;
 
 @Controller
+
 @RequiredArgsConstructor
 @RequestMapping("api/found")
 public class FoundController {
