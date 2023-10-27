@@ -1,3 +1,4 @@
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -27,4 +28,5 @@ spring:
       port: ${DDB_PORT}
       username: ${DDB_USER}
       password: ${DDB_PASSWORD}
+
 
