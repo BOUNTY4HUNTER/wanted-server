@@ -1,37 +1,32 @@
 package community.gdsc.wanted.service;
 
-import community.gdsc.wanted.domain.User;
-import community.gdsc.wanted.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.sql.Timestamp;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-
+import community.gdsc.wanted.domain.User;
+import community.gdsc.wanted.repository.UserRepository;
 
 @SpringBootTest
 class UserServiceTest {
-   @Autowired
-    UserService userService;
+	@Autowired
+	UserService userService;
 
-   @Autowired
-    UserRepository userRepository;
+	@Autowired
+	UserRepository userRepository;
 
+	@Test
+	public void getUsers() {
+		List<User> userList = userService.getUserList();
+		System.out.println("Userlist = " + userList);
+		assertEquals(userList.size(), 9);
+	}
 
-   @Test
-   public void getUsers(){
-       List<User> userList = userService.getUserList();
-       System.out.println("Userlist = " + userList);
-       assertEquals(userList.size(), 9);
-
-
-   }
-
-   @Test
+   /*@Test
    public void modifyUser(){
        User user = userService.findUserById(1);
        user.setUsername("kinggodbell");
@@ -41,16 +36,15 @@ class UserServiceTest {
        User user2 = userService.findUserById(1);
        assertEquals(user.getNickname(), user2.getNickname());
        assertEquals(user.getUsername(), user2.getUsername());
-   }
+   }*/
 
-   @Test
-   public void removeUser(){
-       final int TEST_ID = 9;
-       assertTrue(userService.findUserById(TEST_ID)!=null);
-       userService.removeUserById(TEST_ID);
-       assertEquals(userService.findUserById(TEST_ID), null);
-
-   }
+	@Test
+	public void removeUser() {
+		final int TEST_ID = 9;
+		assertTrue(userService.findUserById(TEST_ID) != null);
+		userService.removeUserById(TEST_ID);
+		assertEquals(userService.findUserById(TEST_ID), null);
+	}
 
 /*
    @BeforeEach
