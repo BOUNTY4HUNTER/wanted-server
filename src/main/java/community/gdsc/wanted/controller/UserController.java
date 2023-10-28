@@ -94,42 +94,4 @@ public class UserController {
 		userService.removeUserById(userId);
 		return new BaseResponse<>(result);
 	}
-
-	@ResponseBody
-	@GetMapping("/id/find/{email}")
-	public BaseResponse<String> findUserId(@PathVariable("email") String email) {
-		try {
-			userService.findUserId(email);
-			System.out.println("-----------실행??------------");
-
-			String result = "메일이 성공적으로 발송되었습니다!";
-			return new BaseResponse<>(result);
-		} catch (BaseException exception) {
-			return new BaseResponse<>((exception.getStatus()));
-		}
-	}
-
-	/*
-	비밀번호찾기 API
-	 */
-	@ResponseBody
-	@GetMapping("password/find/{username}")
-	public BaseResponse<String> findPassword(@PathVariable("username") String username) {
-		String result;
-		try {
-			User user = userService.findUserByUsername(username);
-			try {
-				//해당아이디가 존재하는지 확인
-				String name = user.getUsername();
-			} catch (Exception e) {
-				throw new BaseException(INVALID_USER_ID);
-			}
-
-			userService.findPassword(username);
-			result = "이메일로 비밀번호를 재설정할 수 있는 메일이 발송되었습니다.";
-			return new BaseResponse<>(result);
-		} catch (BaseException exception) {
-			return new BaseResponse<>((exception.getStatus()));
-		}
-	}
 }
