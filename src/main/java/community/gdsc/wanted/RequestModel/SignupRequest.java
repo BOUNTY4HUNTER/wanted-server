@@ -17,21 +17,21 @@ public class SignupRequest {
     @Size(min = 6, max = 20)
     private String username;
     @NotEmpty(message = "비밀번호는 필수 입력값입니다.")
-    @Size(min=6, max=40)
+    @Size(min = 8, max = 40)
     @Pattern(regexp = "^[ -~]+$")
     private String password;
 
     @NotEmpty(message = "비밀번호 확인은 필수 입력값입니다.")
-    @Size(min=6, max=40)
+    @Size(min = 6, max = 40)
     @Pattern(regexp = "^[ -~]+$")
     private String passwordConfirm;
 
     @NotEmpty(message = "이름은 필수 입력값입니다.")
-    @Size(min=2, max=20)
+    @Size(min = 2, max = 20)
     private String firstName;
 
     @NotEmpty(message = "이름은 필수 입력값입니다.")
-    @Size(min=2, max=20)
+    @Size(min = 2, max = 20)
     private String lastName;
 
     @NotEmpty(message = "이메일은 필수 입력값입니다.")
