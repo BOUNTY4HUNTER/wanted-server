@@ -95,13 +95,14 @@ public class UserService {
 
 		//TODO : profile 업데이트 넣기
 
-		//baseuser.set
-		user.setPassword(newPassword);
-		user.setNickname(newNickname);
-		user.setRegionDepth1(newRegionDepth1);
-		user.setRegionDepth2(newRegionDepth2);
-		user.setRegionDepth3(newRegionDepth3);
-		return userRepository.save(user);
+		if (newPassword != null) {
+			user.setPassword(newPassword);
+			user.setNickname(newNickname);
+			user.setRegionDepth1(newRegionDepth1);
+			user.setRegionDepth2(newRegionDepth2);
+			user.setRegionDepth3(newRegionDepth3);
+			return userRepository.save(user);
+		}
 	}
 
 	//id를 이용해 user를 삭제하는 메서드
