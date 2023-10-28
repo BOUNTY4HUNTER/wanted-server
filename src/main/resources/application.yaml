@@ -12,13 +12,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    generate-ddl: false
+    database: mysql
 
   data:
     redis:
       host: ${CACHE_HOST}
       port: ${CACHE_PORT}
       password: ${CACHE_PASSWORD}
-
     mongodb:
       database: ${DDB_NAME}
       host: ${DDB_HOST}
