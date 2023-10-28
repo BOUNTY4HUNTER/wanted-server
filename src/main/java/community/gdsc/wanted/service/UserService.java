@@ -5,7 +5,6 @@ import static community.gdsc.wanted.Base.BaseResponseStatus.*;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 	@Autowired
 	UserRepository userRepository;
-
-	//메일전송
-	@Autowired
-	private final JavaMailSender javaMailSender;
-	//@Value("${spring.mail.username}")
-	private String from = "dbswlsdyd730@naver.com";
-
+	
 	//회원가입
 	public SignupRequest
 	createUser(SignupRequest postUserReq) throws BaseException {
