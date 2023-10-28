@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,12 +20,9 @@ spring:
       host: ${CACHE_HOST}
       port: ${CACHE_PORT}
       password: ${CACHE_PASSWORD}
-
     mongodb:
       database: ${DDB_NAME}
       host: ${DDB_HOST}
       port: ${DDB_PORT}
       username: ${DDB_USER}
       password: ${DDB_PASSWORD}
-
-
