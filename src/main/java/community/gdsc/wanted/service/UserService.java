@@ -97,12 +97,25 @@ public class UserService {
 
 		if (newPassword != null) {
 			user.setPassword(newPassword);
-			user.setNickname(newNickname);
-			user.setRegionDepth1(newRegionDepth1);
-			user.setRegionDepth2(newRegionDepth2);
-			user.setRegionDepth3(newRegionDepth3);
-			return userRepository.save(user);
 		}
+
+		if (newNickname != null) {
+			user.setNickname(newNickname);
+		}
+
+		if (newRegionDepth1 != null) {
+			user.setRegionDepth1(newRegionDepth1);
+		}
+
+		if (newRegionDepth2 != null) {
+			user.setRegionDepth2(newRegionDepth2);
+		}
+
+		if (newRegionDepth3 != null) {
+			user.setRegionDepth3(newRegionDepth3);
+		}
+
+		return userRepository.save(user);
 	}
 
 	//id를 이용해 user를 삭제하는 메서드
