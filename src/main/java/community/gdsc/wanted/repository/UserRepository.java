@@ -7,12 +7,10 @@ import community.gdsc.wanted.domain.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-	User findById(int id);
+    User findById(int id);
 
-	User findByUsername(String username);
+    User findByUsername(String username);
 
-	User findByEmail(String email);
-
-	void deleteById(Integer id);
+    void deleteById(Integer id);
 }
 

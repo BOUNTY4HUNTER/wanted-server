@@ -1,11 +1,11 @@
 package community.gdsc.wanted.domain;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
-import community.gdsc.wanted.RequestModel.SignupRequest;
-import community.gdsc.wanted.ResponseModel.UserAllInfoResponse;
+import community.gdsc.wanted.dto.UserInfoResponseDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,89 +14,104 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "user")
+@Builder
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id; //아이디
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id; //아이디
 
-	@Column(length = 20, unique = true)
-	private String username;
+    @Column(length = 20, unique = true, nullable = false)
+    private String username;
 
-	@Column(length = 40)
-	private String password;
+    @Column(length = 72, nullable = false)
+    private String password;
 
-	@Column(length = 10)
-	private String nickname;
+    @Column(length = 10, nullable = false)
+    private String nickname;
 
-	@Column(length = 20, name = "last_name")
-	private String lastName;
+    @Column(length = 20, name = "last_name", nullable = false)
+    private String lastName;
 
-	@Column(length = 20, name = "first_name")
-	private String firstName;
+    @Column(length = 20, name = "first_name", nullable = false)
+    private String firstName;
 
-	@Column(length = 50, name = "region_depth_1")
-	private String regionDepth1;
+    @Column(length = 50, name = "region_depth_1", nullable = false)
+    private String regionDepth1;
 
-	@Column(length = 50, name = "region_depth_2")
-	private String regionDepth2;
+    @Column(length = 50, name = "region_depth_2", nullable = false)
+    private String regionDepth2;
 
-	@Column(length = 50, name = "region_depth_3")
-	private String regionDepth3;
+    @Column(length = 50, name = "region_depth_3", nullable = false)
+    private String regionDepth3;
 
-	@Column(length = 50, unique = true)
-	private String email;
+    @Column(length = 50, unique = true, nullable = false)
+    private String email;
 
-	@Column(name = "coin")
-	private Integer coin;
+    @Column(name = "coin")
+    @Builder.Default
+    private Integer coin = 0;
 
-	@Column(name = "is_admin")
-	private Boolean isAdmin;
+    @Column(name = "is_admin")
+    @Builder.Default
+    private Boolean isAdmin = false;
 
-	@Column(name = "created_at")
-	@CreatedDate
-	private Timestamp createdAt;
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private Timestamp createdAt;
 
-	@Column(name = "is_deleted")
-	private Boolean isDeleted;
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private Boolean isDeleted = false;
 
-	public SignupRequest toPostUserRes() {
-		return new SignupRequest(username,
-			password,
-			password,
-			firstName,
-			lastName,
-			email,
-			nickname,
-			regionDepth1,
-			regionDepth2,
-			regionDepth3);
-	}
+    public UserInfoResponseDTO toUserInfoResponse() {
+        String baseImageURL = "https://sssdsfsd";
+        return new UserInfoResponseDTO(
+            id,
+            username,
+            baseImageURL,
+            lastName,
+            firstName,
+            email,
+            nickname,
+            regionDepth1,
+            regionDepth2,
+            regionDepth3);
+    }
 
-	public UserAllInfoResponse toUserAllInfoResponse() {
-		String baseImageURL = "https://sssdsfsd";
-		return new UserAllInfoResponse(id,
-			username,
-			baseImageURL,
-			lastName,
-			firstName,
-			email,
-			nickname,
-			regionDepth1,
-			regionDepth2,
-			regionDepth3);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        User target = (User)o;
+
+        return Objects.equals(username, target.username)
+            && Objects.equals(nickname, target.nickname)
+            && Objects.equals(lastName, target.lastName)
+            && Objects.equals(firstName, target.firstName)
+            && Objects.equals(regionDepth1, target.regionDepth1)
+            && Objects.equals(regionDepth2, target.regionDepth2)
+            && Objects.equals(regionDepth3, target.regionDepth3)
+            && Objects.equals(isAdmin, target.isAdmin)
+            && Objects.equals(isDeleted, target.isDeleted)
+            && Objects.equals(coin, target.coin);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
+    }
 }

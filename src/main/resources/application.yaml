@@ -8,7 +8,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -20,9 +20,16 @@ spring:
       host: ${CACHE_HOST}
       port: ${CACHE_PORT}
       password: ${CACHE_PASSWORD}
+      jedis:
+        pool:
+          max-wait:
     mongodb:
       database: ${DDB_NAME}
       host: ${DDB_HOST}
       port: ${DDB_PORT}
       username: ${DDB_USER}
       password: ${DDB_PASSWORD}
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiry-in-seconds: ${JWT_EXPIRY_IN_SECONDS}
