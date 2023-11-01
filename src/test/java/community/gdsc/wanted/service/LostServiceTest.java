@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,5 +118,29 @@ class LostServiceTest {
         assertThat(viewLost.getAddress()).isEqualTo(createdLost.getAddress());
         assertThat(viewLost.getCreatedAt()).isEqualTo(createdLost.getCreatedAt());
         assertThat(viewLost.getIsDeleted()).isEqualTo(createdLost.getIsDeleted());
+    }
+
+    // 글 리스트 테스트
+    @Test
+    public void listLost() {
+        List<Lost> list = createSampleLostList();
+
+        List<Lost> findList = lostService.listLost();
+        assertEquals(list, findList);
+    }
+
+    private List<Lost> createSampleLostList() {
+        List<Lost> list = new ArrayList<>();
+        Lost lost1 = new Lost(1, 1, "test title 1", "test content 1", 10000,
+            "test x 1", "test y 1", "test address 1", new Timestamp(System.currentTimeMillis()), 0);
+        list.add(lost1);
+        lostService.writeLost(lost1);
+
+        Lost lost2 = new Lost(2, 2, "test title 2", "test content 2", 20000,
+            "test x 2", "test y 2", "test address 2", new Timestamp(System.currentTimeMillis()), 0);
+        list.add(lost2);
+        lostService.writeLost(lost2);
+
+        return list;
     }
 }

@@ -1,5 +1,7 @@
 package community.gdsc.wanted.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -44,7 +46,7 @@ public class LostController {
     }
 
     // 글 삭제
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLost(@PathVariable("id") Integer id) {
         try {
             lostService.deleteLost(id);
@@ -55,7 +57,7 @@ public class LostController {
     }
 
     // 글 조회
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Lost> viewLost(@PathVariable("id") Integer id) {
         try {
             Lost viewedLost = lostService.viewLost(id);
@@ -64,6 +66,17 @@ public class LostController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    // 글 리스트
+    @GetMapping("/list")
+    public ResponseEntity<List<Lost>> listLost() {
+        try {
+            List<Lost> lostList = lostService.listLost();
+            return ResponseEntity.status(HttpStatus.OK).body(lostList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }

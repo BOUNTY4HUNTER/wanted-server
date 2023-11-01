@@ -1,5 +1,7 @@
 package community.gdsc.wanted.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import community.gdsc.wanted.domain.Lost;
@@ -26,7 +28,13 @@ public class LostService {
         lostRepository.deleteById(id);
     }
 
+    // 글 조회 메서드
     public Lost viewLost(Integer id) {
         return lostRepository.findById(id).get();
+    }
+
+    // 글 리스트 메서드
+    public List<Lost> listLost() {
+        return lostRepository.findAll();
     }
 }
