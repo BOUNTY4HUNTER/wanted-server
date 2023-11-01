@@ -25,4 +25,8 @@ public class LostService {
     public void deleteLost(Integer id) {
         lostRepository.deleteById(id);
     }
+
+    public Lost viewLost(Integer id) {
+        return lostRepository.findById(id).get();
+    }
 }

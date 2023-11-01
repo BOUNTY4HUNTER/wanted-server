@@ -97,4 +97,24 @@ class LostServiceTest {
         Lost deletedLost = lostRepository.findById(lostId).orElse(null);
         assertNull(deletedLost);
     }
+
+    // 글 조회 테스트
+    @Test
+    public void viewLost() {
+        writeLost();
+        Integer viewId = createdLost.getId();
+
+        Lost viewLost = lostService.viewLost(viewId);
+
+        assertNotNull(viewLost);
+        assertThat(viewLost.getAuthorIdx()).isEqualTo(createdLost.getAuthorIdx());
+        assertThat(viewLost.getTitle()).isEqualTo(createdLost.getTitle());
+        assertThat(viewLost.getContent()).isEqualTo(createdLost.getContent());
+        assertThat(viewLost.getReward()).isEqualTo(createdLost.getReward());
+        assertThat(viewLost.getX()).isEqualTo(createdLost.getX());
+        assertThat(viewLost.getY()).isEqualTo(createdLost.getY());
+        assertThat(viewLost.getAddress()).isEqualTo(createdLost.getAddress());
+        assertThat(viewLost.getCreatedAt()).isEqualTo(createdLost.getCreatedAt());
+        assertThat(viewLost.getIsDeleted()).isEqualTo(createdLost.getIsDeleted());
+    }
 }
