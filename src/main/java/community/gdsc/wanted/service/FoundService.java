@@ -1,5 +1,7 @@
 package community.gdsc.wanted.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import community.gdsc.wanted.domain.Found;
@@ -26,5 +28,13 @@ public class FoundService {
     public void deleteFound(Integer id) {
 
         foundRepository.deleteById(id);
+    }
+
+    public Found viewFound(Integer id) {
+        return foundRepository.findById(id).get();
+    }
+
+    public List<Found> listFound() {
+        return foundRepository.findAll();
     }
 }
