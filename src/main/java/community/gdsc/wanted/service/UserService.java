@@ -1,5 +1,14 @@
 package community.gdsc.wanted.service;
 
+import java.io.UnsupportedEncodingException;
+import java.util.NoSuchElementException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -20,6 +29,7 @@ import community.gdsc.wanted.dto.UserPatchRequestDTO;
 import community.gdsc.wanted.exception.NotFoundException;
 import community.gdsc.wanted.exception.UnauthorizedException;
 import community.gdsc.wanted.repository.UserRepository;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +42,8 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    private final JavaMailSender mailSender;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -137,4 +149,80 @@ public class UserService implements UserDetailsService {
 
         return user;
     }
+
+    //아이디 잃어버렸을 때 메일 보내고
+    public String sendForgotId(String email) throws
+        MailAuthenticationException,
+        NotFoundException,
+        UnsupportedEncodingException {
+
+        User user = userRepository.findByEmail(email);
+
+        if(user==null){
+            throw new NotFoundException();
+        }else{
+
+            String id = user.getUsername();
+
+            //메세지를 생성하고 보낼 메일 설정 저장
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email);
+            message.setFrom(String.valueOf(new InternetAddress("${mail.address}","💰WANTED","UTF-8")));
+            message.setSubject("💰[WANTED] Your ID is here!");
+            message.setText("Hello "+ user.getNickname() + "Your ID is" + id);
+            mailSender.send(message);
+            return "User's ID sent to your email.";
+        }
+    }
+
+    //비밀번호 잃어버렸을 때 메일 보내고
+    public String sendForgotPassword(String username) throws
+        MailAuthenticationException,
+        NotFoundException,
+        UnsupportedEncodingException {
+        User user = userRepository.findByUsername(username);
+
+        System.out.println(username);
+
+        String email = user.getEmail();
+
+        System.out.println(email);
+
+        if(user==null){
+            throw new NotFoundException();
+        }else{
+            String tempPassword = getTempPassword();
+
+            System.out.println(tempPassword);
+
+            user.setPassword(passwordEncoder.encode(tempPassword));
+            userRepository.save(user);
+
+            //메세지를 생성하고 보낼 메일 설정 저장
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email);
+            message.setFrom(String.valueOf(new InternetAddress("${mail.address}","💰WANTED","UTF-8")));
+            message.setSubject("💰[WANTED] New Temporary Password is here!");
+            message.setText("Hello "+ user.getNickname()+"! We send your temporary password here. \nBut this is not secured so please change password once you sign into our site. \nPassword : " + tempPassword);
+            mailSender.send(message);
+            return "Temporary password sent to your email.";
+        }
+    }
+
+    //임시 비밀번호 발급
+    public String getTempPassword(){
+        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+            'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+        String str = "";
+
+        int idx = 0;
+        for (int i = 0; i < 10; i++) {
+            idx = (int) (charSet.length * Math.random());
+            str += charSet[idx];
+        }
+        return str;
+    }
+
+
 }
