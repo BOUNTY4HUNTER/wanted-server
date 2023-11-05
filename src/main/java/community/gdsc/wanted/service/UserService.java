@@ -18,6 +18,7 @@ import community.gdsc.wanted.dto.SigninRequestDTO;
 import community.gdsc.wanted.dto.SignupRequestDTO;
 import community.gdsc.wanted.dto.UserPatchRequestDTO;
 import community.gdsc.wanted.exception.NotFoundException;
+import community.gdsc.wanted.exception.UnauthorizedException;
 import community.gdsc.wanted.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -64,23 +65,14 @@ public class UserService implements UserDetailsService {
     }
 
     // 유저 아이디를 이용해 User를 리턴받는 메서드
-    public User getUserProfile(int id) throws NotFoundException {
-        User user = userRepository.findById(id);
-
-        if (user == null || user.getIsDeleted()) {
-            throw new NotFoundException();
-        }
-
-        return user;
+    public User getUserProfile(int id, String authHeader)
+        throws NotFoundException, UnauthorizedException {
+        return getAuthenticatedUser(id, authHeader);
     }
 
-    public void modifyUser(int id, UserPatchRequestDTO userPatchRequestDTO)
-        throws NotFoundException {
-        User user = userRepository.findById(id);
-
-        if (user == null || user.getIsDeleted()) {
-            throw new NotFoundException();
-        }
+    public void modifyUser(int id, UserPatchRequestDTO userPatchRequestDTO, String authHeader)
+        throws NotFoundException, UnauthorizedException {
+        User user = getAuthenticatedUser(id, authHeader);
 
         entityManager.detach(user);
 
@@ -99,10 +91,9 @@ public class UserService implements UserDetailsService {
     }
 
     //id를 이용해 user를 삭제하는 메서드
-    public void removeUserById(int id) throws NotFoundException {
-        User user = userRepository.findById(id);
-        if (user == null || user.getIsDeleted())
-            throw new NotFoundException();
+    public void removeUserById(int id, String authHeader)
+        throws NotFoundException, UnauthorizedException {
+        User user = getAuthenticatedUser(id, authHeader);
 
         user.setIsDeleted(true);
         userRepository.save(user);
@@ -125,6 +116,25 @@ public class UserService implements UserDetailsService {
             authenticationManagerBuilder.getObject().authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return tokenProvider.createToken(authentication);
+        return tokenProvider.createToken(user.getId(), authentication);
+    }
+
+    private User getAuthenticatedUser(int id, String authHeader)
+        throws NotFoundException, UnauthorizedException {
+        User user = userRepository.findById(id);
+
+        if (user == null) {
+            throw new NotFoundException();
+        }
+
+        if (user.getId() != tokenProvider.getUserIdFromAuthHeader(authHeader)) {
+            throw new UnauthorizedException();
+        }
+
+        if (Boolean.TRUE.equals(user.getIsDeleted())) {
+            throw new NotFoundException();
+        }
+
+        return user;
     }
 }

@@ -1,17 +1,13 @@
 package community.gdsc.wanted.controller;
 
+import community.gdsc.wanted.auth.TokenProvider;
+import community.gdsc.wanted.exception.UnauthorizedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import community.gdsc.wanted.domain.User;
 import community.gdsc.wanted.dto.SigninRequestDTO;
@@ -44,33 +40,39 @@ public class UserController {
     @ResponseBody
     @GetMapping("/{userId}")
     public UserInfoResponseDTO getUserInfo(
+        @RequestHeader("Authorization")
+        String authorizationHeader,
         @PathVariable("userId")
         Integer userId
-    ) throws NotFoundException {
-        User user = userService.getUserProfile(userId);
+    ) throws NotFoundException, UnauthorizedException {
+        User user = userService.getUserProfile(userId, authorizationHeader);
         return user.toUserInfoResponse();
     }
 
     @ResponseBody
     @PatchMapping("/{userId}")    // POST 방식의 요청을 매핑하기 위한 어노테이션
     public ResponseEntity<String> patchUser(
+        @RequestHeader("Authorization")
+        String authorizationHeader,
         @PathVariable("userId")
         Integer userId,
         @Valid
         @RequestBody
         UserPatchRequestDTO request
-    ) throws NotFoundException {
-        userService.modifyUser(userId, request);
+    ) throws NotFoundException, UnauthorizedException {
+        userService.modifyUser(userId, request, authorizationHeader);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
     @ResponseBody
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(
+        @RequestHeader("Authorization")
+        String authorizationHeader,
         @PathVariable("userId")
         Integer userId
-    ) throws NotFoundException {
-        userService.removeUserById(userId);
+    ) throws NotFoundException, UnauthorizedException {
+        userService.removeUserById(userId, authorizationHeader);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 

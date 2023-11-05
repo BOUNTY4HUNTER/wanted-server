@@ -76,9 +76,11 @@ public class UserTests {
             .andExpect(status().isOk())
             .andReturn();
 
+        User user = userRepository.findByUsername("testtest");
+
         Assertions.assertEquals(
-            userRepository.findByUsername("testtest"),
-            dto.toEntity()
+            dto.toEntity(),
+            user
         );
     }
 
@@ -116,7 +118,7 @@ public class UserTests {
         int id = userRepository.save(
             User.builder()
                 .username("testtest")
-                .password("testtest")
+                .password(passwordEncoder.encode("testtest"))
                 .firstName("kim")
                 .lastName("jongha")
                 .email("12191579@inha.edu")
@@ -127,7 +129,26 @@ public class UserTests {
                 .build()
         ).getId();
 
-        mvc.perform(get("/api/user/" + id))
+        String signinBody = new ObjectMapper().writeValueAsString(
+            new SigninRequestDTO("testtest", "testtest")
+        );
+
+        String authHeader = mvc.perform(
+                post("/api/user/signin")
+                    .content(signinBody)
+                    .characterEncoding("utf-8")
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(MockMvcResultHandlers.print())
+            .andReturn()
+            .getResponse()
+            .getHeader("Authorization");
+
+        mvc.perform(
+                get("/api/user/" + id)
+                    .header("Authorization", authHeader)
+                    .characterEncoding("utf-8")
+            )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("testtest"))

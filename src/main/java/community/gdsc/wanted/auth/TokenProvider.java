@@ -51,7 +51,7 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(Authentication authentication) {
+    public String createToken(Integer userId, Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
@@ -61,6 +61,7 @@ public class TokenProvider implements InitializingBean {
 
         return Jwts.builder()
             .setSubject(authentication.getName())
+            .claim("userId", userId)
             .claim(AUTHORITIES_KEY, authorities)
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
@@ -99,5 +100,21 @@ public class TokenProvider implements InitializingBean {
             logger.info("잘못된 JWT 토큰");
         }
         return false;
+    }
+
+    public int getUserIdFromAuthHeader(String header) throws IllegalArgumentException {
+        if (header == null || !header.startsWith("Bearer ")) {
+            throw new IllegalArgumentException();
+        }
+
+        String token = header.substring("Bearer ".length());
+
+        return Jwts
+            .parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .get("userId", Integer.class);
     }
 }

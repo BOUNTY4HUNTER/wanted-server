@@ -11,6 +11,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     protected final ErrorResponseDTO handle(Exception e) {
         logger.error(e);
+        System.out.println(e.getMessage());
         return new ErrorResponseDTO(e.getMessage());
     }
 }
