@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import community.gdsc.wanted.domain.User;
@@ -93,20 +94,16 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/login/forgot/password/{id}")
-    public ResponseEntity<String> findUserPassword(
-        @PathVariable("id")
-        String username
+    @GetMapping("/login/forgot/password/")
+    public ResponseEntity<String> findUserPassword(@RequestParam String id
     ) throws NotFoundException {
-        userService.sendForgotPassword(username);
+        userService.sendForgotPassword(id);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
     @ResponseBody
-    @GetMapping("/login/forgot/id/{email}")
-    public ResponseEntity<String> findUserId(
-        @PathVariable("email")
-        String email
+    @GetMapping("/login/forgot/id/")
+    public ResponseEntity<String> findUserId(@RequestParam String email
     ) throws NotFoundException {
         userService.sendForgotId(email);
         return new ResponseEntity<>("success", HttpStatus.OK);

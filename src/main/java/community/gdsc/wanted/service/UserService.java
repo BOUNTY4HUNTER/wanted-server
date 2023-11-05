@@ -1,5 +1,10 @@
 package community.gdsc.wanted.service;
 
+import java.util.NoSuchElementException;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -31,6 +36,11 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    private final JavaMailSender mailSender;
+    @Value("${spring.mail.username}")
+    private String sender;
+
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -127,4 +137,74 @@ public class UserService implements UserDetailsService {
 
         return tokenProvider.createToken(authentication);
     }
+
+    //아이디 잃어버렸을 때 메일 보내고
+    public String sendForgotId(String email) {
+
+        User user = userRepository.findByEmail(email);
+
+        if(user==null){
+            throw new NoSuchElementException();
+        }else{
+
+            String id = user.getNickname();
+
+            //메세지를 생성하고 보낼 메일 설정 저장
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(id);
+            message.setFrom(sender);
+            message.setSubject(user.getNickname()+" : Your ID is here!");
+            message.setText("Hello" + user.getNickname() + "Your ID is" + id);
+            mailSender.send(message);
+            return "User's ID sent to your email.";
+        }
+    }
+
+    //비밀번호 잃어버렸을 때 메일 보내고
+    public String sendForgotPassword(String username) {
+        User user = userRepository.findByUsername(username);
+
+        System.out.println(username);
+
+        String email = user.getEmail();
+
+        System.out.println(email);
+
+        if(user==null){
+            throw new NoSuchElementException();
+        }else{
+            String tempPassword = getTempPassword();
+
+            System.out.println(tempPassword);
+
+            user.setPassword(passwordEncoder.encode(tempPassword));
+            userRepository.save(user);
+
+            //메세지를 생성하고 보낼 메일 설정 저장
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email);
+            message.setFrom(sender);
+            message.setSubject(user.getNickname()+" : New Temporary Password is here!: ");
+            message.setText("Hello" + user.getNickname() + "! We send your temporary password here. \nBut this is not secured so please change password once you sign into our site. \nPassword : " + tempPassword);
+            mailSender.send(message);
+            return "Temporary password sent to your email.";
+        }
+    }
+
+    //임시 비밀번호 발급
+    public String getTempPassword(){
+        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+            'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+        String str = "";
+
+        int idx = 0;
+        for (int i = 0; i < 10; i++) {
+            idx = (int) (charSet.length * Math.random());
+            str += charSet[idx];
+        }
+        return str;
+    }
+
+
 }
