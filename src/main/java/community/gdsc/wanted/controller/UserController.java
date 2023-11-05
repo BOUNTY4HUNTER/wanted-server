@@ -91,4 +91,24 @@ public class UserController {
             HttpStatus.OK
         );
     }
+
+    @ResponseBody
+    @GetMapping("/login/forgot/password/{id}")
+    public ResponseEntity<String> findUserPassword(
+        @PathVariable("id")
+        String username
+    ) throws NotFoundException {
+        userService.sendForgotPassword(username);
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/login/forgot/id/{email}")
+    public ResponseEntity<String> findUserId(
+        @PathVariable("email")
+        String email
+    ) throws NotFoundException {
+        userService.sendForgotId(email);
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
 }
