@@ -1,5 +1,7 @@
 package community.gdsc.wanted.controller;
 
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -94,17 +96,17 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/login/forgot/password/")
+    @GetMapping("/login/forgot/password")
     public ResponseEntity<String> findUserPassword(@RequestParam String id
-    ) throws NotFoundException {
+    ) throws NotFoundException, UnsupportedEncodingException {
         userService.sendForgotPassword(id);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
     @ResponseBody
-    @GetMapping("/login/forgot/id/")
+    @GetMapping("/login/forgot/id")
     public ResponseEntity<String> findUserId(@RequestParam String email
-    ) throws NotFoundException {
+    ) throws NotFoundException, UnsupportedEncodingException {
         userService.sendForgotId(email);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }

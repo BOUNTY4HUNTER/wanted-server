@@ -141,33 +141,35 @@ public class UserService implements UserDetailsService {
     }
 
     //아이디 잃어버렸을 때 메일 보내고
-    public String sendForgotId(String email) throws MailAuthenticationException {
+    public String sendForgotId(String email) throws
+        MailAuthenticationException,
+        NotFoundException,
+        UnsupportedEncodingException {
 
         User user = userRepository.findByEmail(email);
 
         if(user==null){
-            throw new NoSuchElementException();
+            throw new NotFoundException();
         }else{
 
-            String id = user.getNickname();
+            String id = user.getUsername();
 
             //메세지를 생성하고 보낼 메일 설정 저장
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(email);
-            try {
-                message.setFrom(String.valueOf(new InternetAddress("yunjinyong7302000@gmail.com","💰WANTED","UTF-8")));
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
+            message.setFrom(String.valueOf(new InternetAddress("${mail.address}","💰WANTED","UTF-8")));
             message.setSubject("💰[WANTED] Your ID is here!");
-            message.setText("💰[WANTED] Hello "+ user.getNickname() + "Your ID is" + id);
+            message.setText("Hello "+ user.getNickname() + "Your ID is" + id);
             mailSender.send(message);
             return "User's ID sent to your email.";
         }
     }
 
     //비밀번호 잃어버렸을 때 메일 보내고
-    public String sendForgotPassword(String username) throws MailAuthenticationException {
+    public String sendForgotPassword(String username) throws
+        MailAuthenticationException,
+        NotFoundException,
+        UnsupportedEncodingException {
         User user = userRepository.findByUsername(username);
 
         System.out.println(username);
@@ -177,7 +179,7 @@ public class UserService implements UserDetailsService {
         System.out.println(email);
 
         if(user==null){
-            throw new NoSuchElementException();
+            throw new NotFoundException();
         }else{
             String tempPassword = getTempPassword();
 
@@ -189,13 +191,9 @@ public class UserService implements UserDetailsService {
             //메세지를 생성하고 보낼 메일 설정 저장
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(email);
-            try {
-                message.setFrom(String.valueOf(new InternetAddress("yunjinyong7302000@gmail.com","💰WANTED","UTF-8")));
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
+            message.setFrom(String.valueOf(new InternetAddress("${mail.address}","💰WANTED","UTF-8")));
             message.setSubject("💰[WANTED] New Temporary Password is here!");
-            message.setText("💰[WANTED] Hello "+ user.getNickname()+"! We send your temporary password here. \nBut this is not secured so please change password once you sign into our site. \nPassword : " + tempPassword);
+            message.setText("Hello "+ user.getNickname()+"! We send your temporary password here. \nBut this is not secured so please change password once you sign into our site. \nPassword : " + tempPassword);
             mailSender.send(message);
             return "Temporary password sent to your email.";
         }
