@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import community.gdsc.wanted.dto.ListResponseDTO;
+import community.gdsc.wanted.dto.ViewResponseDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,13 +32,13 @@ public class Lost {
     @Column(name = "author_idx")
     private Integer authorIdx;
 
-    @Column(name = "title", length = 100)
+    @Column(name = "title", length = 100, nullable = false)
     private String title;
 
-    @Column(name = "content", length = 5000)
+    @Column(name = "content", length = 5000, nullable = false)
     private String content;
 
-    @Column(name = "reward")
+    @Column(name = "reward", nullable = false)
     private Integer reward;
 
     @Column(name = "x", length = 20)
@@ -48,10 +50,30 @@ public class Lost {
     @Column(name = "address", length = 45)
     private String address;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     @CreatedDate
     private Timestamp createdAt;
 
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", nullable = false)
     private Integer isDeleted;
+
+    public ViewResponseDTO toViewResponse() {
+        return new ViewResponseDTO(
+            id,
+            title,
+            content,
+            reward,
+            x,
+            y,
+            address);
+    }
+
+    public ListResponseDTO toListResponse() {
+        return new ListResponseDTO(
+            this.getId(),
+            this.getTitle(),
+            this.getReward(),
+            this.getCreatedAt()
+        );
+    }
 }

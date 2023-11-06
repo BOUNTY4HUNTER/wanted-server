@@ -11,9 +11,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import community.gdsc.wanted.domain.Lost;
+import community.gdsc.wanted.dto.ListResponseDTO;
+import community.gdsc.wanted.dto.ViewResponseDTO;
+import community.gdsc.wanted.dto.WriteRequestDTO;
 import community.gdsc.wanted.service.LostService;
 import lombok.RequiredArgsConstructor;
 
@@ -23,62 +27,39 @@ import lombok.RequiredArgsConstructor;
 public class LostController {
     private final LostService lostService;
 
-    // 글 작성
+    // 글 작성 수정
     @PostMapping("/")
-    public ResponseEntity<String> writeLost(@ModelAttribute Lost lost) {
-        try {
-            lostService.writeLost(lost);
-            return ResponseEntity.status(HttpStatus.OK).body("success");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: " + e.getMessage());
-        }
+    public ResponseEntity<String> writeLost(@RequestBody WriteRequestDTO writeRequestDTO) throws Exception {
+        lostService.writeLost(writeRequestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
-    // 글 수정
+    // 글 수정 해야됨
     @PutMapping("/{id}")
-    public ResponseEntity<String> modifyLost(@PathVariable("id") Integer id, @ModelAttribute Lost modifiedLost) {
-        try {
-            lostService.modifyLost(modifiedLost);
-            return ResponseEntity.status(HttpStatus.OK).body("success");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: " + e.getMessage());
-        }
+    public ResponseEntity<String> modifyLost(@PathVariable("id") Integer id, @ModelAttribute Lost modifiedLost)
+        throws Exception {
+        lostService.modifyLost(modifiedLost);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
-    // 글 삭제
+    // 글 삭제 수정
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteLost(@PathVariable("id") Integer id) {
-        try {
-            lostService.deleteLost(id);
-            return ResponseEntity.status(HttpStatus.OK).body("success");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: " + e.getMessage());
-        }
+    public ResponseEntity<String> deleteLost(@PathVariable("id") Integer id) throws Exception {
+        lostService.deleteLost(id);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
-    // 글 조회
+    // 글 조회 수정
     @GetMapping("/{id}")
-    public ResponseEntity<Lost> viewLost(@PathVariable("id") Integer id) {
-        try {
-            Lost viewedLost = lostService.viewLost(id);
-            if (viewedLost != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(viewedLost);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+    public ResponseEntity<ViewResponseDTO> viewLost(@PathVariable("id") Integer id) throws Exception {
+        ViewResponseDTO viewedLost = lostService.viewLost(id);
+        return ResponseEntity.status(HttpStatus.OK).body(viewedLost);
     }
 
-    // 글 리스트
+    // 글 리스트 수정
     @GetMapping("/list")
-    public ResponseEntity<List<Lost>> listLost() {
-        try {
-            List<Lost> lostList = lostService.listLost();
-            return ResponseEntity.status(HttpStatus.OK).body(lostList);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+    public ResponseEntity<List<ListResponseDTO>> listLost() throws Exception {
+        List<ListResponseDTO> lostList = lostService.listLost();
+        return ResponseEntity.status(HttpStatus.OK).body(lostList);
     }
 }
