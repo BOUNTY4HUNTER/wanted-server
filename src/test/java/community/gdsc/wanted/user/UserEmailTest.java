@@ -175,7 +175,7 @@ public class UserEmailTest {
 	void findId() throws Exception {
 		String email = userRepository.save(
 			User.builder()
-				.username("testtest")
+				.username("12191632")
 				.password(passwordEncoder.encode("testtest"))
 				.firstName("yun")
 				.lastName("jinyong")
@@ -200,7 +200,7 @@ public class UserEmailTest {
 	void findPassword() throws Exception {
 		String username = userRepository.save(
 			User.builder()
-				.username("testtest")
+				.username("12191632")
 				.password(passwordEncoder.encode("test1234"))
 				.firstName("yun")
 				.lastName("jinyong")
