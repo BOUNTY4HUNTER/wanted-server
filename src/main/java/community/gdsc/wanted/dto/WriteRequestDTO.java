@@ -22,6 +22,8 @@ public class WriteRequestDTO {
 
     private String address;
 
+    private Integer isDeleted = 0;
+
     public Lost toEntity() {
         return Lost.builder()
             .title(title)
@@ -30,6 +32,7 @@ public class WriteRequestDTO {
             .x(x)
             .y(y)
             .address(address)
+            .isDeleted(isDeleted)
             .build();
     }
 }

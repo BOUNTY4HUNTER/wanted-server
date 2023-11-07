@@ -3,7 +3,6 @@ package community.gdsc.wanted.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +12,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import community.gdsc.wanted.domain.Lost;
+import community.gdsc.wanted.dto.ListResponseDTO;
+import community.gdsc.wanted.dto.ModifyRequestDTO;
+import community.gdsc.wanted.dto.ViewResponseDTO;
+import community.gdsc.wanted.dto.WriteRequestDTO;
 import community.gdsc.wanted.repository.LostRepository;
 
 @SpringBootTest
@@ -28,64 +31,47 @@ class LostServiceTest {
     // 글 작성 테스트
     @Test
     public void writeLost() {
-        Lost lost = new Lost();
-        lost.setAuthorIdx(1234);
-        lost.setTitle("test title");
-        lost.setContent("test content");
-        lost.setReward(10000);
-        lost.setX("test x");
-        lost.setY("test y");
-        lost.setAddress("test address");
-        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-        lost.setCreatedAt(currentTimestamp);
-        lost.setIsDeleted(0);
+        WriteRequestDTO writeRequestDTO = new WriteRequestDTO();
+        writeRequestDTO.setTitle("test title");
+        writeRequestDTO.setContent("test content");
+        writeRequestDTO.setReward(10000);
+        writeRequestDTO.setX("test x");
+        writeRequestDTO.setY("test y");
+        writeRequestDTO.setAddress("test address");
 
-        lostService.writeLost(lost);
-        createdLost = lost;
-        Lost savedLost = lostRepository.findById(lost.getId()).orElse(null);
+        lostService.writeLost(writeRequestDTO);
+        List<Lost> lostList = lostRepository.findAll();
+        Lost savedLost = lostList.get(0);
+        createdLost = savedLost;
 
         assertNotNull(savedLost);
-        assertThat(lost.getAuthorIdx()).isEqualTo(savedLost.getAuthorIdx());
-        assertThat(lost.getTitle()).isEqualTo(savedLost.getTitle());
-        assertThat(lost.getContent()).isEqualTo(savedLost.getContent());
-        assertThat(lost.getReward()).isEqualTo(savedLost.getReward());
-        assertThat(lost.getX()).isEqualTo(savedLost.getX());
-        assertThat(lost.getY()).isEqualTo(savedLost.getY());
-        assertThat(lost.getAddress()).isEqualTo(savedLost.getAddress());
-        assertThat(lost.getCreatedAt()).isEqualTo(savedLost.getCreatedAt());
-        assertThat(lost.getIsDeleted()).isEqualTo(savedLost.getIsDeleted());
+        assertThat(writeRequestDTO.getTitle()).isEqualTo(savedLost.getTitle());
+        assertThat(writeRequestDTO.getContent()).isEqualTo(savedLost.getContent());
+        assertThat(writeRequestDTO.getReward()).isEqualTo(savedLost.getReward());
+        assertThat(writeRequestDTO.getX()).isEqualTo(savedLost.getX());
+        assertThat(writeRequestDTO.getY()).isEqualTo(savedLost.getY());
+        assertThat(writeRequestDTO.getAddress()).isEqualTo(savedLost.getAddress());
     }
 
     // 글 수정 테스트
     @Test
     public void modifyLost() {
         writeLost();
-        Lost modifingLost = lostRepository.findById(createdLost.getId()).orElse(null);
+        Integer modifyId = createdLost.getId();
+        ModifyRequestDTO modifyLost = new ModifyRequestDTO("modify title", "modify content", 10000,
+            "modify x", "modify y", "modify address");
+        //Lost modifingLost = lostRepository.findById(modifyId).get();
 
-        modifingLost.setAuthorIdx(1234);
-        modifingLost.setTitle("modify title");
-        modifingLost.setContent("modify content");
-        modifingLost.setReward(10000);
-        modifingLost.setX("modify x");
-        modifingLost.setY("modify y");
-        modifingLost.setAddress("modify address");
-        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-        modifingLost.setCreatedAt(currentTimestamp);
-        modifingLost.setIsDeleted(0);
-
-        lostService.modifyLost(modifingLost);
-        Lost savedLost = lostRepository.findById(createdLost.getId()).orElse(null);
+        lostService.modifyLost(modifyId, modifyLost);
+        Lost savedLost = lostRepository.findById(modifyId).get();
 
         assertNotNull(savedLost);
-        assertThat(modifingLost.getAuthorIdx()).isEqualTo(savedLost.getAuthorIdx());
-        assertThat(modifingLost.getTitle()).isEqualTo(savedLost.getTitle());
-        assertThat(modifingLost.getContent()).isEqualTo(savedLost.getContent());
-        assertThat(modifingLost.getReward()).isEqualTo(savedLost.getReward());
-        assertThat(modifingLost.getX()).isEqualTo(savedLost.getX());
-        assertThat(modifingLost.getY()).isEqualTo(savedLost.getY());
-        assertThat(modifingLost.getAddress()).isEqualTo(savedLost.getAddress());
-        assertThat(modifingLost.getCreatedAt()).isEqualTo(savedLost.getCreatedAt());
-        assertThat(modifingLost.getIsDeleted()).isEqualTo(savedLost.getIsDeleted());
+        assertThat(modifyLost.getTitle()).isEqualTo(savedLost.getTitle());
+        assertThat(modifyLost.getContent()).isEqualTo(savedLost.getContent());
+        assertThat(modifyLost.getReward()).isEqualTo(savedLost.getReward());
+        assertThat(modifyLost.getX()).isEqualTo(savedLost.getX());
+        assertThat(modifyLost.getY()).isEqualTo(savedLost.getY());
+        assertThat(modifyLost.getAddress()).isEqualTo(savedLost.getAddress());
     }
 
     // 글 삭제 테스트
@@ -93,11 +79,11 @@ class LostServiceTest {
     public void deleteLost() {
         writeLost();
         Integer lostId = createdLost.getId();
+        Lost deletedLost = lostRepository.findById(lostId).get();
 
         lostService.deleteLost(lostId);
 
-        Lost deletedLost = lostRepository.findById(lostId).orElse(null);
-        assertNull(deletedLost);
+        assertThat(deletedLost.getIsDeleted()).isEqualTo(1);
     }
 
     // 글 조회 테스트
@@ -106,41 +92,38 @@ class LostServiceTest {
         writeLost();
         Integer viewId = createdLost.getId();
 
-        Lost viewLost = lostService.viewLost(viewId);
+        ViewResponseDTO viewLost = lostService.viewLost(viewId);
 
         assertNotNull(viewLost);
-        assertThat(viewLost.getAuthorIdx()).isEqualTo(createdLost.getAuthorIdx());
         assertThat(viewLost.getTitle()).isEqualTo(createdLost.getTitle());
         assertThat(viewLost.getContent()).isEqualTo(createdLost.getContent());
         assertThat(viewLost.getReward()).isEqualTo(createdLost.getReward());
         assertThat(viewLost.getX()).isEqualTo(createdLost.getX());
         assertThat(viewLost.getY()).isEqualTo(createdLost.getY());
         assertThat(viewLost.getAddress()).isEqualTo(createdLost.getAddress());
-        assertThat(viewLost.getCreatedAt()).isEqualTo(createdLost.getCreatedAt());
-        assertThat(viewLost.getIsDeleted()).isEqualTo(createdLost.getIsDeleted());
     }
 
     // 글 리스트 테스트
     @Test
     public void listLost() {
-        List<Lost> list = createSampleLostList();
+        createSampleLostList();
 
-        List<Lost> findList = lostService.listLost();
-        assertEquals(list, findList);
+        List<ListResponseDTO> listLost = lostService.listLost();
+
+        assertFalse(listLost.isEmpty());
+        assertEquals(2, listLost.size());
     }
 
-    private List<Lost> createSampleLostList() {
-        List<Lost> list = new ArrayList<>();
-        Lost lost1 = new Lost(1, 1, "test title 1", "test content 1", 10000,
-            "test x 1", "test y 1", "test address 1", new Timestamp(System.currentTimeMillis()), 0);
+    private void createSampleLostList() {
+        List<WriteRequestDTO> list = new ArrayList<>();
+        WriteRequestDTO lost1 = new WriteRequestDTO("test title1", "test content1", 10000,
+            "test x1", "test y1", "test address1", 0);
         list.add(lost1);
         lostService.writeLost(lost1);
 
-        Lost lost2 = new Lost(2, 2, "test title 2", "test content 2", 20000,
-            "test x 2", "test y 2", "test address 2", new Timestamp(System.currentTimeMillis()), 0);
+        WriteRequestDTO lost2 = new WriteRequestDTO("test title2", "test content2", 10000,
+            "test x2", "test y2", "test address2", 0);
         list.add(lost2);
         lostService.writeLost(lost2);
-
-        return list;
     }
 }

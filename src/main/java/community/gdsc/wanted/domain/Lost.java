@@ -55,7 +55,7 @@ public class Lost {
     private Timestamp createdAt;
 
     @Column(name = "is_deleted", nullable = false)
-    private Integer isDeleted;
+    private Integer isDeleted = 0;
 
     public ViewResponseDTO toViewResponse() {
         return new ViewResponseDTO(
