@@ -18,7 +18,6 @@ import community.gdsc.wanted.service.FoundService;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-
 @RequiredArgsConstructor
 @RequestMapping("api/found")
 public class FoundController {
@@ -27,34 +26,22 @@ public class FoundController {
     //게시글 작성하기
     @PostMapping("/")
     public ResponseEntity<String> writeFound(@ModelAttribute Found found) {
-        try {
-            foundService.writeFound(found);
-            return ResponseEntity.status(HttpStatus.OK).body("Successfully done");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: " + e.getMessage());
-        }
+        foundService.writeFound(found);
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully done");
     }
 
     //수정
     @PutMapping("/{id}")
     public ResponseEntity<String> modifyFound(@PathVariable("id") Integer id, @ModelAttribute Found modifiedFound) {
-        try {
-            foundService.modifyFound(modifiedFound);
-            return ResponseEntity.status(HttpStatus.OK).body("success");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: " + e.getMessage());
-        }
+        foundService.modifyFound(modifiedFound);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
     //삭제
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteFound(@PathVariable("id") Integer id) {
-        try {
-            foundService.deleteFound(id);
-            return ResponseEntity.status(HttpStatus.OK).body("success");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: " + e.getMessage());
-        }
+        foundService.deleteFound(id);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
     //조회

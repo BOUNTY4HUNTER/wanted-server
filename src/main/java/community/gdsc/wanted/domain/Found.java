@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "found")
 @Entity
 @Data
-
 public class Found {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
