@@ -20,7 +20,7 @@ public class LostWriteRequestDTO {
     @Size(max = 5000, message = "내용은 5000글자를 넘을 수 없습니다.")
     private final String content;
 
-    @NotNull(message = "사례금은 필수 입ㄹ겨값입니다.")
+    @NotNull(message = "사례금은 필수 입력값입니다.")
     @Positive(message = "사례금은 양수의 값입니다.")
     private final Integer reward;
 

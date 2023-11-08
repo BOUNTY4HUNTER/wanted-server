@@ -41,13 +41,13 @@ public class Lost {
     @Column(name = "reward", nullable = false)
     private Integer reward;
 
-    @Column(name = "x", length = 20)
+    @Column(name = "x", length = 20, nullable = true)
     private String x;
 
-    @Column(name = "y", length = 20)
+    @Column(name = "y", length = 20, nullable = true)
     private String y;
 
-    @Column(name = "address", length = 45)
+    @Column(name = "address", length = 45, nullable = true)
     private String address;
 
     @Column(name = "created_at", updatable = false)
