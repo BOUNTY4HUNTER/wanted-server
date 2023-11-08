@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import community.gdsc.wanted.DTO.ModifyRequestDto;
 import community.gdsc.wanted.domain.Found;
 import community.gdsc.wanted.service.FoundService;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +34,9 @@ public class FoundController {
 
     //수정
     @PutMapping("/{id}")
-    public ResponseEntity<String> modifyFound(@PathVariable("id") Integer id, @ModelAttribute Found modifiedFound) {
-        foundService.modifyFound(modifiedFound);
+    public ResponseEntity<String> modifyFound(@PathVariable("id") Integer id,
+        @RequestBody ModifyRequestDto modifyRequestDto) {
+        foundService.modifyFound(id, modifyRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
