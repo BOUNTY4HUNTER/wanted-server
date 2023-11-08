@@ -12,10 +12,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import community.gdsc.wanted.domain.Lost;
-import community.gdsc.wanted.dto.ListResponseDTO;
-import community.gdsc.wanted.dto.ModifyRequestDTO;
-import community.gdsc.wanted.dto.ViewResponseDTO;
-import community.gdsc.wanted.dto.WriteRequestDTO;
+import community.gdsc.wanted.dto.LostListResponseDTO;
+import community.gdsc.wanted.dto.LostModifyRequestDTO;
+import community.gdsc.wanted.dto.LostResponseDTO;
+import community.gdsc.wanted.dto.LostWriteRequestDTO;
 import community.gdsc.wanted.repository.LostRepository;
 
 @SpringBootTest
@@ -31,26 +31,21 @@ class LostServiceTest {
     // 글 작성 테스트
     @Test
     public void writeLost() {
-        WriteRequestDTO writeRequestDTO = new WriteRequestDTO();
-        writeRequestDTO.setTitle("test title");
-        writeRequestDTO.setContent("test content");
-        writeRequestDTO.setReward(10000);
-        writeRequestDTO.setX("test x");
-        writeRequestDTO.setY("test y");
-        writeRequestDTO.setAddress("test address");
+        LostWriteRequestDTO lostWriteRequestDTO = new LostWriteRequestDTO("test title", "test content",
+            10000, "test x", "test y", "test address");
 
-        lostService.writeLost(writeRequestDTO);
+        lostService.writeLost(lostWriteRequestDTO);
         List<Lost> lostList = lostRepository.findAll();
         Lost savedLost = lostList.get(0);
         createdLost = savedLost;
 
         assertNotNull(savedLost);
-        assertThat(writeRequestDTO.getTitle()).isEqualTo(savedLost.getTitle());
-        assertThat(writeRequestDTO.getContent()).isEqualTo(savedLost.getContent());
-        assertThat(writeRequestDTO.getReward()).isEqualTo(savedLost.getReward());
-        assertThat(writeRequestDTO.getX()).isEqualTo(savedLost.getX());
-        assertThat(writeRequestDTO.getY()).isEqualTo(savedLost.getY());
-        assertThat(writeRequestDTO.getAddress()).isEqualTo(savedLost.getAddress());
+        assertThat(lostWriteRequestDTO.getTitle()).isEqualTo(savedLost.getTitle());
+        assertThat(lostWriteRequestDTO.getContent()).isEqualTo(savedLost.getContent());
+        assertThat(lostWriteRequestDTO.getReward()).isEqualTo(savedLost.getReward());
+        assertThat(lostWriteRequestDTO.getX()).isEqualTo(savedLost.getX());
+        assertThat(lostWriteRequestDTO.getY()).isEqualTo(savedLost.getY());
+        assertThat(lostWriteRequestDTO.getAddress()).isEqualTo(savedLost.getAddress());
     }
 
     // 글 수정 테스트
@@ -58,9 +53,8 @@ class LostServiceTest {
     public void modifyLost() {
         writeLost();
         Integer modifyId = createdLost.getId();
-        ModifyRequestDTO modifyLost = new ModifyRequestDTO("modify title", "modify content", 10000,
-            "modify x", "modify y", "modify address");
-        //Lost modifingLost = lostRepository.findById(modifyId).get();
+        LostModifyRequestDTO modifyLost = new LostModifyRequestDTO("modify title", "modify content",
+            10000, "modify x", "modify y", "modify address");
 
         lostService.modifyLost(modifyId, modifyLost);
         Lost savedLost = lostRepository.findById(modifyId).get();
@@ -92,7 +86,7 @@ class LostServiceTest {
         writeLost();
         Integer viewId = createdLost.getId();
 
-        ViewResponseDTO viewLost = lostService.viewLost(viewId);
+        LostResponseDTO viewLost = lostService.viewLost(viewId);
 
         assertNotNull(viewLost);
         assertThat(viewLost.getTitle()).isEqualTo(createdLost.getTitle());
@@ -108,21 +102,21 @@ class LostServiceTest {
     public void listLost() {
         createSampleLostList();
 
-        List<ListResponseDTO> listLost = lostService.listLost();
+        List<LostListResponseDTO> listLost = lostService.listLost();
 
         assertFalse(listLost.isEmpty());
         assertEquals(2, listLost.size());
     }
 
     private void createSampleLostList() {
-        List<WriteRequestDTO> list = new ArrayList<>();
-        WriteRequestDTO lost1 = new WriteRequestDTO("test title1", "test content1", 10000,
-            "test x1", "test y1", "test address1", 0);
+        List<LostWriteRequestDTO> list = new ArrayList<>();
+        LostWriteRequestDTO lost1 = new LostWriteRequestDTO("test title1", "test content1", 10000,
+            "test x1", "test y1", "test address1");
         list.add(lost1);
         lostService.writeLost(lost1);
 
-        WriteRequestDTO lost2 = new WriteRequestDTO("test title2", "test content2", 10000,
-            "test x2", "test y2", "test address2", 0);
+        LostWriteRequestDTO lost2 = new LostWriteRequestDTO("test title2", "test content2", 10000,
+            "test x2", "test y2", "test address2");
         list.add(lost2);
         lostService.writeLost(lost2);
     }

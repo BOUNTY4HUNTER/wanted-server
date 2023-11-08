@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import community.gdsc.wanted.domain.Lost;
-import community.gdsc.wanted.dto.ListResponseDTO;
-import community.gdsc.wanted.dto.ModifyRequestDTO;
-import community.gdsc.wanted.dto.ViewResponseDTO;
-import community.gdsc.wanted.dto.WriteRequestDTO;
+import community.gdsc.wanted.dto.LostListResponseDTO;
+import community.gdsc.wanted.dto.LostModifyRequestDTO;
+import community.gdsc.wanted.dto.LostResponseDTO;
+import community.gdsc.wanted.dto.LostWriteRequestDTO;
 import community.gdsc.wanted.repository.LostRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -19,13 +19,13 @@ public class LostService {
     private final LostRepository lostRepository;
 
     // 글 작성 메서드
-    public void writeLost(WriteRequestDTO writeRequestDTO) {
-        Lost lost = writeRequestDTO.toEntity();
+    public void writeLost(LostWriteRequestDTO lostWriteRequestDTO) {
+        Lost lost = lostWriteRequestDTO.toEntity();
         lostRepository.save(lost);
     }
 
     // 글 수정 메서드
-    public void modifyLost(Integer id, ModifyRequestDTO modifiedLost) {
+    public void modifyLost(Integer id, LostModifyRequestDTO modifiedLost) {
         Lost lost = lostRepository.findById(id).get();
 
         if (!modifiedLost.getTitle().isBlank()) {
@@ -59,15 +59,15 @@ public class LostService {
     }
 
     // 글 조회 메서드
-    public ViewResponseDTO viewLost(Integer id) {
+    public LostResponseDTO viewLost(Integer id) {
         Lost lost = lostRepository.findById(id).get();
         return lost.toViewResponse();
     }
 
     // 글 리스트 메서드
-    public List<ListResponseDTO> listLost() {
+    public List<LostListResponseDTO> listLost() {
         List<Lost> lostList = lostRepository.findAll();
-        List<ListResponseDTO> responseList = lostList.stream()
+        List<LostListResponseDTO> responseList = lostList.stream()
             .map(lost -> lost.toListResponse())
             .collect(Collectors.toList());
         return responseList;

@@ -4,8 +4,8 @@ import java.sql.Timestamp;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import community.gdsc.wanted.dto.ListResponseDTO;
-import community.gdsc.wanted.dto.ViewResponseDTO;
+import community.gdsc.wanted.dto.LostListResponseDTO;
+import community.gdsc.wanted.dto.LostResponseDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -55,10 +55,11 @@ public class Lost {
     private Timestamp createdAt;
 
     @Column(name = "is_deleted", nullable = false)
+    @Builder.Default
     private Integer isDeleted = 0;
 
-    public ViewResponseDTO toViewResponse() {
-        return new ViewResponseDTO(
+    public LostResponseDTO toViewResponse() {
+        return new LostResponseDTO(
             id,
             title,
             content,
@@ -68,8 +69,8 @@ public class Lost {
             address);
     }
 
-    public ListResponseDTO toListResponse() {
-        return new ListResponseDTO(
+    public LostListResponseDTO toListResponse() {
+        return new LostListResponseDTO(
             this.getId(),
             this.getTitle(),
             this.getReward(),

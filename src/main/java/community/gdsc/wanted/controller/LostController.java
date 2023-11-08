@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import community.gdsc.wanted.dto.ListResponseDTO;
-import community.gdsc.wanted.dto.ModifyRequestDTO;
-import community.gdsc.wanted.dto.ViewResponseDTO;
-import community.gdsc.wanted.dto.WriteRequestDTO;
+import community.gdsc.wanted.dto.LostListResponseDTO;
+import community.gdsc.wanted.dto.LostModifyRequestDTO;
+import community.gdsc.wanted.dto.LostResponseDTO;
+import community.gdsc.wanted.dto.LostWriteRequestDTO;
 import community.gdsc.wanted.service.LostService;
 import lombok.RequiredArgsConstructor;
 
@@ -28,16 +28,16 @@ public class LostController {
 
     // 글 작성
     @PostMapping("/")
-    public ResponseEntity<String> writeLost(@RequestBody WriteRequestDTO writeRequestDTO) {
-        lostService.writeLost(writeRequestDTO);
+    public ResponseEntity<String> writeLost(@RequestBody LostWriteRequestDTO lostWriteRequestDTO) {
+        lostService.writeLost(lostWriteRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
     // 글 수정
     @PutMapping("/{id}")
     public ResponseEntity<String> modifyLost(@PathVariable("id") Integer id,
-        @RequestBody ModifyRequestDTO modifyRequestDTO) {
-        lostService.modifyLost(id, modifyRequestDTO);
+        @RequestBody LostModifyRequestDTO lostModifyRequestDTO) {
+        lostService.modifyLost(id, lostModifyRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
@@ -50,15 +50,15 @@ public class LostController {
 
     // 글 조회
     @GetMapping("/{id}")
-    public ResponseEntity<ViewResponseDTO> viewLost(@PathVariable("id") Integer id) {
-        ViewResponseDTO viewedLost = lostService.viewLost(id);
+    public ResponseEntity<LostResponseDTO> viewLost(@PathVariable("id") Integer id) {
+        LostResponseDTO viewedLost = lostService.viewLost(id);
         return ResponseEntity.status(HttpStatus.OK).body(viewedLost);
     }
 
     // 글 리스트
     @GetMapping("/list")
-    public ResponseEntity<List<ListResponseDTO>> listLost() {
-        List<ListResponseDTO> lostList = lostService.listLost();
+    public ResponseEntity<List<LostListResponseDTO>> listLost() {
+        List<LostListResponseDTO> lostList = lostService.listLost();
         return ResponseEntity.status(HttpStatus.OK).body(lostList);
     }
 }
