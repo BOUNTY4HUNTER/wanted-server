@@ -1,6 +1,10 @@
 package community.gdsc.wanted.service;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +49,9 @@ public class UserService implements UserDetailsService {
 
     private final JavaMailSender mailSender;
 
+
+    private String uploadFolder="{UPLOAD_FOLDER}";
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -62,11 +69,22 @@ public class UserService implements UserDetailsService {
 
     // 회원가입
     public void createUser(SignupRequestDTO signupRequestDTO)
-        throws IllegalArgumentException {
+        throws IllegalArgumentException, IOException {
         User user = signupRequestDTO.toEntity();
 
         String plainPassword = signupRequestDTO.getPassword();
         user.setPassword(passwordEncoder.encode(plainPassword));
+
+        String imageFileName;
+
+        if(signupRequestDTO.getProfile()==null){
+            imageFileName = "default";
+        }else{
+            imageFileName = user.getId() + "_" + signupRequestDTO.getProfile().getOriginalFilename();
+            Path imageFilePath = Paths.get(uploadFolder + imageFileName);
+            user.setProfileUrl(imageFilePath.toString());
+            Files.write(imageFilePath, signupRequestDTO.getProfile().getBytes());
+        }
 
         userRepository.save(user);
     }
@@ -83,7 +101,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void modifyUser(int id, UserPatchRequestDTO userPatchRequestDTO, String authHeader)
-        throws NotFoundException, UnauthorizedException {
+        throws NotFoundException, UnauthorizedException, IOException {
         User user = getAuthenticatedUser(id, authHeader);
 
         entityManager.detach(user);
@@ -98,7 +116,11 @@ public class UserService implements UserDetailsService {
             user.setRegionDepth2(userPatchRequestDTO.getRegionDepth2());
         if (!userPatchRequestDTO.getRegionDepth3().isBlank())
             user.setRegionDepth3(userPatchRequestDTO.getRegionDepth3());
-
+        if (!userPatchRequestDTO.getProfile().isEmpty()) {
+            String imageFileName = user.getId() + "_" + userPatchRequestDTO.getProfile().getOriginalFilename();
+            Path imageFilePath = Paths.get(uploadFolder + imageFileName);
+            user.setProfileUrl(imageFilePath.toString());
+        }
         userRepository.save(user);
     }
 
