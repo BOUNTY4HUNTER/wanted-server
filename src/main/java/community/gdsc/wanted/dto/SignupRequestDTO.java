@@ -1,5 +1,7 @@
 package community.gdsc.wanted.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import community.gdsc.wanted.domain.User;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -54,6 +56,8 @@ public class SignupRequestDTO {
     @Size(min = 2, max = 20, message = "유효하지 않은 '읍/면/동' 입력입니다.")
     private final String regionDepth3;
 
+    private MultipartFile profile;
+
     public User toEntity() {
         return User.builder()
             .username(username)
@@ -65,6 +69,7 @@ public class SignupRequestDTO {
             .regionDepth1(regionDepth1)
             .regionDepth2(regionDepth2)
             .regionDepth3(regionDepth3)
+            .profileUrl("{default_image}")
             .build();
     }
 }

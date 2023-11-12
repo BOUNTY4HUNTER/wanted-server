@@ -1,5 +1,7 @@
 package community.gdsc.wanted.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -10,7 +12,8 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class UserPatchRequestDTO {
-    private final String profileImageURL;
+    //private final String profileImageURL;
+    private MultipartFile profile;
 
     @Size(min = 8, max = 40)
     @Pattern(regexp = "^[ -~]+$")
