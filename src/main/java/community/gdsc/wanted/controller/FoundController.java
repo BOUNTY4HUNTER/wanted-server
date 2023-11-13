@@ -7,15 +7,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import community.gdsc.wanted.DTO.ModifyRequestDto;
-import community.gdsc.wanted.domain.Found;
+import community.gdsc.wanted.DTO.FoundListResponseDto;
+import community.gdsc.wanted.DTO.FoundModifyRequestDto;
+import community.gdsc.wanted.DTO.FoundResponseDto;
+import community.gdsc.wanted.DTO.FoundWriteRequestDto;
 import community.gdsc.wanted.service.FoundService;
 import lombok.RequiredArgsConstructor;
 
@@ -27,17 +28,17 @@ public class FoundController {
 
     //게시글 작성하기
     @PostMapping("/")
-    public ResponseEntity<String> writeFound(@ModelAttribute Found found) {
-        foundService.writeFound(found);
+    public ResponseEntity<String> writeFound(@RequestBody FoundWriteRequestDto foundWriteRequestDto) {
+        foundService.writeFound(foundWriteRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body("Successfully done");
     }
 
     //수정
     @PutMapping("/{id}")
     public ResponseEntity<String> modifyFound(@PathVariable("id") Integer id,
-        @RequestBody ModifyRequestDto modifyRequestDto) {
+        @RequestBody FoundModifyRequestDto modifyRequestDto) {
         foundService.modifyFound(id, modifyRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body("success");
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully done");
     }
 
     //삭제
@@ -49,27 +50,15 @@ public class FoundController {
 
     //조회
     @GetMapping("{id}")
-    public ResponseEntity<Found> viewFound(@PathVariable("id") Integer id) {
-        try {
-            Found viewedFound = foundService.viewFound(id);
-            if (viewedFound != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(viewedFound);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+    public ResponseEntity<FoundResponseDto> viewFound(@PathVariable("id") Integer id) {
+        FoundResponseDto viewedFound = foundService.viewFound(id);
+        return ResponseEntity.status(HttpStatus.OK).body(viewedFound);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<Found>> listFound() {
-        try {
-            List<Found> foundList = foundService.listFound();
-            return ResponseEntity.status(HttpStatus.OK).body(foundList);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+    public ResponseEntity<List<FoundListResponseDto>> listFound() {
+        List<FoundListResponseDto> foundList = foundService.listFound();
+        return ResponseEntity.status(HttpStatus.OK).body(foundList);
     }
 }
 

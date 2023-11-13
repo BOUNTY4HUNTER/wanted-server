@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModifyRequestDto {
+public class FoundModifyRequestDto {
     private String title;
 
     private String content;

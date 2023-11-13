@@ -1,10 +1,14 @@
 package community.gdsc.wanted.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import community.gdsc.wanted.DTO.ModifyRequestDto;
+import community.gdsc.wanted.DTO.FoundListResponseDto;
+import community.gdsc.wanted.DTO.FoundModifyRequestDto;
+import community.gdsc.wanted.DTO.FoundResponseDto;
+import community.gdsc.wanted.DTO.FoundWriteRequestDto;
 import community.gdsc.wanted.domain.Found;
 import community.gdsc.wanted.repository.FoundRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +19,13 @@ public class FoundService {
     private final FoundRepository foundRepository;
 
     // 글 작성
-    public void writeFound(Found found) {
-
+    public void writeFound(FoundWriteRequestDto foundWriteRequestDto) {
+        Found found = foundWriteRequestDto.toEntity();
         foundRepository.save(found);
     }
 
     // 글 수정
-    public void modifyFound(Integer id, ModifyRequestDto modifiedFound) {
+    public void modifyFound(Integer id, FoundModifyRequestDto modifiedFound) {
         Found found = foundRepository.findById(id).get();
 
         if (!modifiedFound.getTitle().isBlank()) {
@@ -36,15 +40,21 @@ public class FoundService {
 
     // 글 삭제
     public void deleteFound(Integer id) {
-
-        foundRepository.deleteById(id);
+        Found found = foundRepository.findById(id).get();
+        found.setIs_deleted(1);
+        foundRepository.save(found);
     }
 
-    public Found viewFound(Integer id) {
-        return foundRepository.findById(id).get();
+    public FoundResponseDto viewFound(Integer id) {
+        Found found = foundRepository.findById(id).get();
+        return found.toViewResponse();
     }
 
-    public List<Found> listFound() {
-        return foundRepository.findAll();
+    public List<FoundListResponseDto> listFound() {
+        List<Found> foundList = foundRepository.findAll();
+        List<FoundListResponseDto> responseList = foundList.stream()
+            .map(found -> found.toListResponse())
+            .collect(Collectors.toList());
+        return responseList;
     }
 }

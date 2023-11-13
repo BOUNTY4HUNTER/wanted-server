@@ -1,7 +1,11 @@
 package community.gdsc.wanted.domain;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
+import org.springframework.data.annotation.CreatedDate;
+
+import community.gdsc.wanted.DTO.FoundListResponseDto;
+import community.gdsc.wanted.DTO.FoundResponseDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,15 +32,33 @@ public class Found {
     @Column(name = "author_idx")
     private Integer authorIdx;
 
-    @Column(name = "title")
+    @Column(name = "title", length = 100, nullable = false)
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 5000, nullable = false)
     private String content;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
+    @CreatedDate
     private Timestamp created_at;
 
-    @Column(name = "is_deleted")
-    private Integer is_deleted;
+    @Column(name = "is_deleted", nullable = false)
+    @Builder.Default
+    private Integer is_deleted = 0;
+
+    public FoundResponseDto toViewResponse() {
+        return new FoundResponseDto(
+            id,
+            title,
+            content
+        );
+    }
+
+    public FoundListResponseDto toListResponse() {
+        return new FoundListResponseDto(
+            this.getId(),
+            this.getTitle(),
+            this.getCreated_at()
+        );
+    }
 }
