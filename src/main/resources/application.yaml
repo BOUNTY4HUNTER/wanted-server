@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${RDB_CONNECTION_STRING}
+    username: ${RDB_USER}
+    password: ${RDB_PASSWORD}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  data:
+    redis:
+      host: ${CACHE_HOST}
+      port: ${CACHE_PORT}
+      password: ${CACHE_PASSWORD}
+
+    mongodb:
+      database: ${DDB_NAME}
+      host: ${DDB_HOST}
+      port: ${DDB_PORT}
+      username: ${DDB_USER}
+      password: ${DDB_PASSWORD}
