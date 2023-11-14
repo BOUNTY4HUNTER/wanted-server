@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import community.gdsc.wanted.dto.FoundListResponseDto;
@@ -22,35 +23,54 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("api/found")
+@RequestMapping("/api/found")
 public class FoundController {
     private final FoundService foundService;
 
     //게시글 작성하기
-    @PostMapping("/")
-    public ResponseEntity<String> writeFound(@RequestBody FoundWriteRequestDto foundWriteRequestDto) {
-        foundService.writeFound(foundWriteRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully done");
+    @PostMapping("")
+    public ResponseEntity<String> writeFound(
+        @RequestHeader("Authorization")
+        String authorizationHeader,
+        @RequestBody
+        FoundWriteRequestDto foundWriteRequestDto
+    ) {
+        foundService.writeFound(foundWriteRequestDto, authorizationHeader);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
     //수정
     @PutMapping("/{id}")
-    public ResponseEntity<String> modifyFound(@PathVariable("id") Integer id,
-        @RequestBody FoundModifyRequestDto modifyRequestDto) {
-        foundService.modifyFound(id, modifyRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully done");
+    public ResponseEntity<String> modifyFound(
+        @RequestHeader("Authorization")
+        String authorizationHeader,
+        @PathVariable("id")
+        Integer id,
+        @RequestBody
+        FoundModifyRequestDto modifyRequestDto
+    ) {
+        foundService.modifyFound(id, modifyRequestDto, authorizationHeader);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
     //삭제
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteFound(@PathVariable("id") Integer id) {
-        foundService.deleteFound(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteFound(
+        @RequestHeader("Authorization")
+        String authorizationHeader,
+        @PathVariable("id")
+        Integer id
+    ) {
+        foundService.deleteFound(id, authorizationHeader);
         return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
     //조회
-    @GetMapping("{id}")
-    public ResponseEntity<FoundResponseDto> viewFound(@PathVariable("id") Integer id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<FoundResponseDto> viewFound(
+        @PathVariable("id")
+        Integer id
+    ) {
         FoundResponseDto viewedFound = foundService.viewFound(id);
         return ResponseEntity.status(HttpStatus.OK).body(viewedFound);
     }

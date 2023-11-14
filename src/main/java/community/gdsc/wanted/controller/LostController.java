@@ -28,7 +28,7 @@ public class LostController {
     private final LostService lostService;
 
     // 글 작성
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<String> writeLost(
         @RequestHeader("Authorization")
         String authorizationHeader,
