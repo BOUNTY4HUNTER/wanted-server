@@ -1,6 +1,7 @@
 package community.gdsc.wanted.dto;
 
 import community.gdsc.wanted.domain.Lost;
+import community.gdsc.wanted.domain.User;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -34,10 +35,11 @@ public class LostWriteRequestDTO {
     @Size(max = 45, message = "주소는 45글자를 넘을 수 없습니다.")
     private final String address;
 
-    private final Integer isDeleted = 0;
+    private final Boolean isDeleted = false;
 
-    public Lost toEntity() {
+    public Lost toEntity(User user) {
         return Lost.builder()
+            .author(user)
             .title(title)
             .content(content)
             .reward(reward)

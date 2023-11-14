@@ -11,6 +11,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,8 +31,9 @@ public class Lost {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "author_idx")
-    private Integer authorIdx;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
 
     @Column(name = "title", length = 100, nullable = false)
     private String title;
@@ -56,7 +59,7 @@ public class Lost {
 
     @Column(name = "is_deleted", nullable = false)
     @Builder.Default
-    private Integer isDeleted = 0;
+    private Boolean isDeleted = false;
 
     public LostResponseDTO toViewResponse() {
         return new LostResponseDTO(
