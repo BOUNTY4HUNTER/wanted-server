@@ -1,5 +1,6 @@
 package community.gdsc.wanted.controller;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.springframework.http.HttpHeaders;
@@ -37,11 +38,11 @@ public class UserController {
 
     @ResponseBody
     @PostMapping()    // POST 방식의 요청을 매핑하기 위한 어노테이션
-    public ResponseEntity<String> createUser(
+    public ResponseEntity<String> createUser( //회원가입
         @RequestBody
         @Valid
         SignupRequestDTO request
-    ) throws IllegalArgumentException {
+    ) throws IllegalArgumentException, IOException {
         userService.createUser(request);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
@@ -68,7 +69,7 @@ public class UserController {
         @Valid
         @RequestBody
         UserPatchRequestDTO request
-    ) throws NotFoundException, UnauthorizedException {
+    ) throws NotFoundException, UnauthorizedException, IOException {
         userService.modifyUser(userId, request, authorizationHeader);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }

@@ -3,6 +3,7 @@ package community.gdsc.wanted.domain;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import community.gdsc.wanted.dto.UserInfoResponseDTO;
@@ -74,12 +75,14 @@ public class User {
     @Builder.Default
     private Boolean isDeleted = false;
 
+    @Column(name="profile_url")
+    private String profileUrl="{default_image}";
+
     public UserInfoResponseDTO toUserInfoResponse() {
-        String baseImageURL = "https://sssdsfsd";
         return new UserInfoResponseDTO(
             id,
             username,
-            baseImageURL,
+            profileUrl,
             lastName,
             firstName,
             email,

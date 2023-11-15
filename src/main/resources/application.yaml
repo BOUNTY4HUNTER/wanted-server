@@ -16,7 +16,6 @@ spring:
           timeout: 5000 # 6
           starttls:
             enable: true # 7
-
   jpa:
     show-sql: true
     hibernate:
