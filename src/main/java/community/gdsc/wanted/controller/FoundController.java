@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import community.gdsc.wanted.dto.FoundListResponseDto;
-import community.gdsc.wanted.dto.FoundModifyRequestDto;
-import community.gdsc.wanted.dto.FoundResponseDto;
-import community.gdsc.wanted.dto.FoundWriteRequestDto;
+import community.gdsc.wanted.dto.FoundListResponseDTO;
+import community.gdsc.wanted.dto.FoundModifyRequestDTO;
+import community.gdsc.wanted.dto.FoundResponseDTO;
+import community.gdsc.wanted.dto.FoundWriteRequestDTO;
 import community.gdsc.wanted.service.FoundService;
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +33,7 @@ public class FoundController {
         @RequestHeader("Authorization")
         String authorizationHeader,
         @RequestBody
-        FoundWriteRequestDto foundWriteRequestDto
+        FoundWriteRequestDTO foundWriteRequestDto
     ) {
         foundService.writeFound(foundWriteRequestDto, authorizationHeader);
         return ResponseEntity.status(HttpStatus.OK).body("success");
@@ -47,7 +47,7 @@ public class FoundController {
         @PathVariable("id")
         Integer id,
         @RequestBody
-        FoundModifyRequestDto modifyRequestDto
+        FoundModifyRequestDTO modifyRequestDto
     ) {
         foundService.modifyFound(id, modifyRequestDto, authorizationHeader);
         return ResponseEntity.status(HttpStatus.OK).body("success");
@@ -67,17 +67,17 @@ public class FoundController {
 
     //조회
     @GetMapping("/{id}")
-    public ResponseEntity<FoundResponseDto> viewFound(
+    public ResponseEntity<FoundResponseDTO> viewFound(
         @PathVariable("id")
         Integer id
     ) {
-        FoundResponseDto viewedFound = foundService.viewFound(id);
+        FoundResponseDTO viewedFound = foundService.viewFound(id);
         return ResponseEntity.status(HttpStatus.OK).body(viewedFound);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<FoundListResponseDto>> listFound() {
-        List<FoundListResponseDto> foundList = foundService.listFound();
+    public ResponseEntity<List<FoundListResponseDTO>> listFound() {
+        List<FoundListResponseDTO> foundList = foundService.listFound();
         return ResponseEntity.status(HttpStatus.OK).body(foundList);
     }
 }
