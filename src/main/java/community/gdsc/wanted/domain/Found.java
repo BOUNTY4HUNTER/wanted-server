@@ -4,8 +4,8 @@ import java.sql.Timestamp;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import community.gdsc.wanted.dto.FoundListResponseDto;
-import community.gdsc.wanted.dto.FoundResponseDto;
+import community.gdsc.wanted.dto.FoundListResponseDTO;
+import community.gdsc.wanted.dto.FoundResponseDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,9 +41,6 @@ public class Found {
     @Column(name = "content", length = 5000, nullable = false)
     private String content;
 
-    @Column(name = "reward", nullable = false)
-    private Integer reward;
-
     @Column(name = "x", length = 20, nullable = true)
     private String x;
 
@@ -61,16 +58,16 @@ public class Found {
     @Builder.Default
     private Boolean isDeleted = false;
 
-    public FoundResponseDto toViewResponse() {
-        return new FoundResponseDto(
+    public FoundResponseDTO toViewResponse() {
+        return new FoundResponseDTO(
             id,
             title,
             content
         );
     }
 
-    public FoundListResponseDto toListResponse() {
-        return new FoundListResponseDto(
+    public FoundListResponseDTO toListResponse() {
+        return new FoundListResponseDTO(
             this.getId(),
             this.getTitle(),
             this.getCreatedAt()

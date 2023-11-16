@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import community.gdsc.wanted.auth.TokenProvider;
 import community.gdsc.wanted.domain.Found;
 import community.gdsc.wanted.domain.User;
-import community.gdsc.wanted.dto.FoundListResponseDto;
-import community.gdsc.wanted.dto.FoundModifyRequestDto;
-import community.gdsc.wanted.dto.FoundResponseDto;
-import community.gdsc.wanted.dto.FoundWriteRequestDto;
+import community.gdsc.wanted.dto.FoundListResponseDTO;
+import community.gdsc.wanted.dto.FoundModifyRequestDTO;
+import community.gdsc.wanted.dto.FoundResponseDTO;
+import community.gdsc.wanted.dto.FoundWriteRequestDTO;
 import community.gdsc.wanted.exception.NotFoundException;
 import community.gdsc.wanted.exception.UnauthorizedException;
 import community.gdsc.wanted.repository.FoundRepository;
@@ -29,13 +29,18 @@ public class FoundService {
         throws NotFoundException, UnauthorizedException {
         Optional<Found> found = foundRepository.findById(id);
 
+        Integer userId = tokenProvider.getUserIdFromAuthHeader(authHeader);
+        Optional<User> user = userRepository.findById(userId);
+
         if (found.isEmpty()) {
             throw new NotFoundException();
         }
 
         Found foundEntity = found.get();
 
-        if (foundEntity.getId() != tokenProvider.getUserIdFromAuthHeader(authHeader)) {
+        if (Boolean.TRUE.equals(user.isEmpty()
+            || user.get().getIsDeleted())
+            || foundEntity.getId().equals(userId)) {
             throw new UnauthorizedException();
         }
 
@@ -47,7 +52,7 @@ public class FoundService {
     }
 
     // 글 작성
-    public void writeFound(FoundWriteRequestDto foundWriteRequestDto, String authHeader) {
+    public void writeFound(FoundWriteRequestDTO foundWriteRequestDto, String authHeader) {
         Integer userId = tokenProvider.getUserIdFromAuthHeader(authHeader);
         Optional<User> user = userRepository.findById(userId);
 
@@ -60,7 +65,7 @@ public class FoundService {
     }
 
     // 글 수정
-    public void modifyFound(Integer id, FoundModifyRequestDto modifiedFound, String authHeader) {
+    public void modifyFound(Integer id, FoundModifyRequestDTO modifiedFound, String authHeader) {
         Found found = getAuthenticatedFound(id, authHeader);
 
         if (!modifiedFound.getTitle().isBlank()) {
@@ -90,7 +95,7 @@ public class FoundService {
         foundRepository.save(found);
     }
 
-    public FoundResponseDto viewFound(Integer id) {
+    public FoundResponseDTO viewFound(Integer id) {
         Optional<Found> found = foundRepository.findById(id);
 
         if (found.isEmpty()) {
@@ -100,7 +105,7 @@ public class FoundService {
         return found.get().toViewResponse();
     }
 
-    public List<FoundListResponseDto> listFound() {
+    public List<FoundListResponseDTO> listFound() {
         List<Found> foundList = foundRepository.findAll();
 
         return foundList.stream()

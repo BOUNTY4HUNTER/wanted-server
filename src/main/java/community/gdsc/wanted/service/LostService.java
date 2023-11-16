@@ -29,6 +29,9 @@ public class LostService {
         throws NotFoundException, UnauthorizedException {
         Optional<Lost> lost = lostRepository.findById(id);
 
+        Integer userId = tokenProvider.getUserIdFromAuthHeader(authHeader);
+        Optional<User> user = userRepository.findById(userId);
+
         if (lost.isEmpty()) {
             throw new NotFoundException();
         }
@@ -39,7 +42,9 @@ public class LostService {
             throw new UnauthorizedException();
         }
 
-        if (Boolean.TRUE.equals(lostEntity.getIsDeleted())) {
+        if (Boolean.TRUE.equals(user.isEmpty()
+            || user.get().getIsDeleted())
+            || Boolean.TRUE.equals(lostEntity.getIsDeleted())) {
             throw new NotFoundException();
         }
 
