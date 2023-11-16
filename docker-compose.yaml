@@ -1,0 +1,19 @@
+version: "0.1"
+
+services:
+  server:
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wanted-server
+    image: wanted-server:latest 
+    restart: always
+    tty: true
+    stdin_open: true
+
+    ports:
+      - $PORT:8080
+
+    
