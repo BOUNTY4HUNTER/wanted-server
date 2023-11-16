@@ -23,20 +23,12 @@ public class SignupRequestDTO {
     private final String password;
 
     @NotEmpty(message = "이름은 필수 입력값입니다.")
-<<<<<<< HEAD
-    @Size(min = 2, max = 20, message = "유효하지 않은 이름입니다.")
-=======
     @Size(min = 1, max = 20, message = "유효하지 않은 이름입니다.")
->>>>>>> develop
     @Pattern(regexp = "^[a-zA-Z가-힣]+$", message = "유효하지 않은 이름입니다.")
     private final String firstName;
 
     @NotEmpty(message = "성은 필수 입력값입니다.")
-<<<<<<< HEAD
-    @Size(min = 2, max = 20, message = "유효하지 않은 성입니다.")
-=======
     @Size(min = 1, max = 20, message = "유효하지 않은 성입니다.")
->>>>>>> develop
     @Pattern(regexp = "^[a-zA-Z가-힣]+$", message = "유효하지 않은 성입니다.")
     private final String lastName;
 
