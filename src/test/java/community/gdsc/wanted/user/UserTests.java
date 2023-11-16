@@ -22,6 +22,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import community.gdsc.wanted.domain.User;
 import community.gdsc.wanted.dto.SigninRequestDTO;
 import community.gdsc.wanted.dto.SignupRequestDTO;
+<<<<<<< HEAD
+=======
+import community.gdsc.wanted.repository.FoundRepository;
+>>>>>>> develop
 import community.gdsc.wanted.repository.UserRepository;
 
 @SpringBootTest
@@ -31,6 +35,11 @@ public class UserTests {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+<<<<<<< HEAD
+=======
+    private FoundRepository foundRepository;
+    @Autowired
+>>>>>>> develop
     private PasswordEncoder passwordEncoder;
 
     private MockMvc mvc;

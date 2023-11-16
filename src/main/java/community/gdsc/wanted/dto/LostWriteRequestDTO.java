@@ -35,8 +35,11 @@ public class LostWriteRequestDTO {
     @Size(max = 45, message = "주소는 45글자를 넘을 수 없습니다.")
     private final String address;
 
+<<<<<<< HEAD
     private final Boolean isDeleted = false;
 
+=======
+>>>>>>> develop
     public Lost toEntity(User user) {
         return Lost.builder()
             .author(user)
@@ -46,7 +49,10 @@ public class LostWriteRequestDTO {
             .x(x)
             .y(y)
             .address(address)
+<<<<<<< HEAD
             .isDeleted(isDeleted)
+=======
+>>>>>>> develop
             .build();
     }
 }

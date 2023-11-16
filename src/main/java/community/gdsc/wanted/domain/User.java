@@ -1,9 +1,15 @@
 package community.gdsc.wanted.domain;
 
 import java.sql.Timestamp;
+<<<<<<< HEAD
 import java.util.Objects;
 
 import org.hibernate.annotations.ColumnDefault;
+=======
+import java.util.Collection;
+import java.util.Objects;
+
+>>>>>>> develop
 import org.hibernate.annotations.CreationTimestamp;
 
 import community.gdsc.wanted.dto.UserInfoResponseDTO;
@@ -12,6 +18,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+<<<<<<< HEAD
+=======
+import jakarta.persistence.OneToMany;
+>>>>>>> develop
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -75,8 +85,20 @@ public class User {
     @Builder.Default
     private Boolean isDeleted = false;
 
+<<<<<<< HEAD
     @Column(name="profile_url")
     private String profileUrl="{default_image}";
+=======
+    @Column(name = "profile_url")
+    @Builder.Default
+    private String profileUrl = "{default_image}";
+
+    @OneToMany(mappedBy = "author")
+    private Collection<Found> founds;
+
+    @OneToMany(mappedBy = "author")
+    private Collection<Lost> losts;
+>>>>>>> develop
 
     public UserInfoResponseDTO toUserInfoResponse() {
         return new UserInfoResponseDTO(
